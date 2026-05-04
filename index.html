@@ -92,20 +92,6 @@
             opacity: 0.85;
         }
 
-        .btn-close {
-            width: 56px;
-            height: 56px;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.28);
-            border: 3px solid rgba(255, 255, 255, 0.8);
-            color: white;
-            font-size: 26px;
-        }
-
-        .btn-close:hover {
-            background: rgba(255, 255, 255, 0.42);
-        }
-
         .btn-back {
             padding: 12px 20px;
             border-radius: 30px;
@@ -359,6 +345,9 @@
             align-items: center;
             justify-content: center;
             padding: 14px;
+            background: white;
+            cursor: pointer;
+            transition: background-color 0.22s ease;
         }
 
         #coloring-svg-container {
@@ -367,6 +356,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            pointer-events: none;
         }
 
         #coloring-svg-container svg {
@@ -374,9 +364,8 @@
             max-height: 100%;
             width: auto;
             height: auto;
-            background: white;
-            border-radius: 22px;
-            box-shadow: 0 8px 36px rgba(0,0,0,0.16);
+            background: transparent;
+            pointer-events: all;
         }
 
         #coloring-svg-container svg [data-colorable] {
@@ -388,80 +377,7 @@
             opacity: 0.78;
         }
 
-        /* ===== MODAL ===== */
-        .modal-overlay {
-            display: none;
-            position: fixed;
-            inset: 0;
-            background: rgba(0, 0, 0, 0.55);
-            z-index: 9999;
-            align-items: center;
-            justify-content: center;
-            backdrop-filter: blur(4px);
-        }
-
-        .modal-overlay.active {
-            display: flex;
-        }
-
-        .modal-box {
-            background: white;
-            border-radius: 28px;
-            padding: 36px 40px 28px;
-            text-align: center;
-            max-width: 360px;
-            width: 88%;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.30);
-            animation: popIn 0.22s ease;
-        }
-
-        @keyframes popIn {
-            from { transform: scale(0.8); opacity: 0; }
-            to   { transform: scale(1);   opacity: 1; }
-        }
-
-        .modal-emoji {
-            font-size: 64px;
-            margin-bottom: 14px;
-            line-height: 1;
-        }
-
-        .modal-text {
-            font-size: clamp(18px, 3vw, 24px);
-            color: #444;
-            margin-bottom: 28px;
-            line-height: 1.45;
-        }
-
-        .modal-buttons {
-            display: flex;
-            gap: 14px;
-            justify-content: center;
-        }
-
-        .btn-modal {
-            padding: 14px 32px;
-            border-radius: 30px;
-            border: none;
-            font-size: clamp(16px, 2.5vw, 20px);
-            font-family: inherit;
-            font-weight: bold;
-            cursor: pointer;
-            transition: transform 0.15s, opacity 0.15s;
-        }
-
-        .btn-modal:active { transform: scale(0.93); opacity: 0.85; }
-
-        .btn-modal-no {
-            background: #e0e0e0;
-            color: #555;
-        }
-
-        .btn-modal-yes {
-            background: linear-gradient(135deg, #ff6b9d, #ff9a3c);
-            color: white;
-            box-shadow: 0 4px 14px rgba(255, 107, 157, 0.4);
-        }
+        /* ===== VIEW 2 – COLORING ===== */
     </style>
 </head>
 <body>
@@ -471,9 +387,7 @@
      ============================================================ -->
 <div id="view-list" class="view active">
     <div class="app-header header-list">
-        <div style="width:56px;flex-shrink:0;"></div>
         <span class="app-title">🎨 Kolorowanka!</span>
-        <button class="btn btn-close" onclick="confirmClose()" aria-label="Zamknij">✕</button>
     </div>
     <div class="list-content" id="list-content"></div>
 </div>
@@ -485,7 +399,6 @@
     <div class="app-header header-color">
         <button class="btn btn-back" onclick="goToList()">← Wróć</button>
         <span class="app-title" id="color-view-title">Koloruj!</span>
-        <button class="btn btn-close" onclick="confirmClose()" aria-label="Zamknij">✕</button>
     </div>
 
     <div class="color-picker-bar">
@@ -495,20 +408,6 @@
 
     <div class="svg-canvas-wrap">
         <div id="coloring-svg-container"></div>
-    </div>
-</div>
-
-<!-- ============================================================
-     MODAL – Potwierdzenie wyjścia
-     ============================================================ -->
-<div class="modal-overlay" id="modal-close">
-    <div class="modal-box">
-        <div class="modal-emoji">👋</div>
-        <p class="modal-text">Wychodzisz?<br>Na pewno chcesz zamknąć?</p>
-        <div class="modal-buttons">
-            <button class="btn-modal btn-modal-no"  onclick="cancelClose()">Nie!</button>
-            <button class="btn-modal btn-modal-yes" onclick="doClose()">Tak</button>
-        </div>
     </div>
 </div>
 
@@ -666,6 +565,173 @@ const IMAGES = [
         </svg>`
     },
     /* ── POZIOM ŚREDNI ── */
+    {
+        id: 'samochod',
+        difficulty: 'medium',
+        title: '🚗 Samochód',
+        svg: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300">
+            <!-- Karoseria dolna -->
+            <rect data-colorable="true" x="18" y="178" width="264" height="72" rx="16" fill="white" stroke="black" stroke-width="5"/>
+            <!-- Kabina -->
+            <path data-colorable="true" d="M 68 178 L 88 116 Q 96 104 112 102 L 196 102 Q 212 104 220 116 L 236 178 Z" fill="white" stroke="black" stroke-width="5"/>
+            <!-- Szyba przednia -->
+            <path data-colorable="true" d="M 218 178 L 200 122 Q 196 112 184 110 L 160 108 L 180 112 L 218 178 Z" fill="white" stroke="black" stroke-width="4"/>
+            <!-- Szyba tylna -->
+            <path data-colorable="true" d="M 86 178 L 102 122 Q 106 112 118 110 L 142 108 L 120 112 L 86 178 Z" fill="white" stroke="black" stroke-width="4"/>
+            <!-- Okno środkowe -->
+            <rect data-colorable="true" x="120" y="112" width="60" height="52" rx="6" fill="white" stroke="black" stroke-width="4"/>
+            <!-- Zderzak przedni -->
+            <rect data-colorable="true" x="240" y="210" width="32" height="16" rx="6" fill="white" stroke="black" stroke-width="4"/>
+            <!-- Zderzak tylny -->
+            <rect data-colorable="true" x="28" y="210" width="32" height="16" rx="6" fill="white" stroke="black" stroke-width="4"/>
+            <!-- Koło lewe -->
+            <circle data-colorable="true" cx="74" cy="248" r="36" fill="white" stroke="black" stroke-width="5"/>
+            <circle data-colorable="true" cx="74" cy="248" r="20" fill="white" stroke="black" stroke-width="4"/>
+            <circle cx="74" cy="248" r="7" fill="black"/>
+            <!-- Koło prawe -->
+            <circle data-colorable="true" cx="226" cy="248" r="36" fill="white" stroke="black" stroke-width="5"/>
+            <circle data-colorable="true" cx="226" cy="248" r="20" fill="white" stroke="black" stroke-width="4"/>
+            <circle cx="226" cy="248" r="7" fill="black"/>
+            <!-- Reflektor przedni -->
+            <ellipse data-colorable="true" cx="268" cy="188" rx="14" ry="10" fill="white" stroke="black" stroke-width="4"/>
+            <!-- Reflektor tylny -->
+            <ellipse data-colorable="true" cx="32" cy="188" rx="14" ry="10" fill="white" stroke="black" stroke-width="4"/>
+            <!-- Klamka -->
+            <rect data-colorable="true" x="154" y="194" width="28" height="10" rx="5" fill="white" stroke="black" stroke-width="3"/>
+        </svg>`
+    },
+    {
+        id: 'lisek',
+        difficulty: 'medium',
+        title: '🦊 Lisek',
+        svg: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300">
+            <!-- Ogon -->
+            <ellipse data-colorable="true" cx="232" cy="234" rx="54" ry="42" fill="white" stroke="black" stroke-width="5" transform="rotate(30,232,234)"/>
+            <!-- Koniuszek ogona -->
+            <ellipse data-colorable="true" cx="250" cy="256" rx="26" ry="18" fill="white" stroke="black" stroke-width="4" transform="rotate(30,250,256)"/>
+            <!-- Ciało -->
+            <ellipse data-colorable="true" cx="150" cy="222" rx="82" ry="62" fill="white" stroke="black" stroke-width="5"/>
+            <!-- Brzuszek -->
+            <ellipse data-colorable="true" cx="150" cy="228" rx="46" ry="44" fill="white" stroke="black" stroke-width="4"/>
+            <!-- Głowa -->
+            <ellipse data-colorable="true" cx="150" cy="124" rx="72" ry="66" fill="white" stroke="black" stroke-width="5"/>
+            <!-- Ucho lewe zewn. -->
+            <polygon data-colorable="true" points="94,76 72,22 130,68" fill="white" stroke="black" stroke-width="5" stroke-linejoin="round"/>
+            <!-- Ucho prawe zewn. -->
+            <polygon data-colorable="true" points="206,76 228,22 170,68" fill="white" stroke="black" stroke-width="5" stroke-linejoin="round"/>
+            <!-- Ucho lewe wewn. -->
+            <polygon data-colorable="true" points="97,72 80,36 124,66" fill="white" stroke="black" stroke-width="3" stroke-linejoin="round"/>
+            <!-- Ucho prawe wewn. -->
+            <polygon data-colorable="true" points="203,72 220,36 176,66" fill="white" stroke="black" stroke-width="3" stroke-linejoin="round"/>
+            <!-- Twarz – biały pysk -->
+            <ellipse data-colorable="true" cx="150" cy="150" rx="44" ry="36" fill="white" stroke="black" stroke-width="4"/>
+            <!-- Nos -->
+            <ellipse data-colorable="true" cx="150" cy="136" rx="11" ry="8" fill="black"/>
+            <!-- Uśmiech -->
+            <path d="M 134 154 Q 150 168 166 154" fill="none" stroke="black" stroke-width="4" stroke-linecap="round"/>
+            <!-- Wąsy lewe -->
+            <line x1="82" y1="146" x2="118" y2="149" stroke="black" stroke-width="3" stroke-linecap="round"/>
+            <line x1="82" y1="156" x2="118" y2="156" stroke="black" stroke-width="3" stroke-linecap="round"/>
+            <!-- Wąsy prawe -->
+            <line x1="218" y1="146" x2="182" y2="149" stroke="black" stroke-width="3" stroke-linecap="round"/>
+            <line x1="218" y1="156" x2="182" y2="156" stroke="black" stroke-width="3" stroke-linecap="round"/>
+            <!-- Lewe oko -->
+            <ellipse data-colorable="true" cx="120" cy="112" rx="16" ry="14" fill="white" stroke="black" stroke-width="4"/>
+            <circle cx="123" cy="112" r="7" fill="black"/>
+            <circle cx="125" cy="109" r="2" fill="white"/>
+            <!-- Prawe oko -->
+            <ellipse data-colorable="true" cx="180" cy="112" rx="16" ry="14" fill="white" stroke="black" stroke-width="4"/>
+            <circle cx="183" cy="112" r="7" fill="black"/>
+            <circle cx="185" cy="109" r="2" fill="white"/>
+        </svg>`
+    },
+    {
+        id: 'zabka',
+        difficulty: 'medium',
+        title: '🐸 Żabka',
+        svg: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300">
+            <!-- Tylna nóżka lewa -->
+            <ellipse data-colorable="true" cx="62" cy="238" rx="48" ry="22" fill="white" stroke="black" stroke-width="4" transform="rotate(-20,62,238)"/>
+            <ellipse data-colorable="true" cx="28" cy="258" rx="28" ry="14" fill="white" stroke="black" stroke-width="4"/>
+            <!-- Tylna nóżka prawa -->
+            <ellipse data-colorable="true" cx="238" cy="238" rx="48" ry="22" fill="white" stroke="black" stroke-width="4" transform="rotate(20,238,238)"/>
+            <ellipse data-colorable="true" cx="272" cy="258" rx="28" ry="14" fill="white" stroke="black" stroke-width="4"/>
+            <!-- Ciało -->
+            <ellipse data-colorable="true" cx="150" cy="216" rx="96" ry="72" fill="white" stroke="black" stroke-width="5"/>
+            <!-- Brzuszek -->
+            <ellipse data-colorable="true" cx="150" cy="228" rx="62" ry="52" fill="white" stroke="black" stroke-width="4"/>
+            <!-- Przednia nóżka lewa -->
+            <ellipse data-colorable="true" cx="72" cy="196" rx="28" ry="14" fill="white" stroke="black" stroke-width="4" transform="rotate(-50,72,196)"/>
+            <!-- Przednia nóżka prawa -->
+            <ellipse data-colorable="true" cx="228" cy="196" rx="28" ry="14" fill="white" stroke="black" stroke-width="4" transform="rotate(50,228,196)"/>
+            <!-- Głowa -->
+            <ellipse data-colorable="true" cx="150" cy="140" rx="86" ry="70" fill="white" stroke="black" stroke-width="5"/>
+            <!-- Oko lewe (gałka) -->
+            <circle data-colorable="true" cx="108" cy="96" r="30" fill="white" stroke="black" stroke-width="4"/>
+            <!-- Oko prawe (gałka) -->
+            <circle data-colorable="true" cx="192" cy="96" r="30" fill="white" stroke="black" stroke-width="4"/>
+            <!-- Tęczówka lewa -->
+            <circle data-colorable="true" cx="108" cy="96" r="18" fill="white" stroke="black" stroke-width="3"/>
+            <circle cx="112" cy="94" r="9" fill="black"/>
+            <circle cx="115" cy="91" r="3" fill="white"/>
+            <!-- Tęczówka prawa -->
+            <circle data-colorable="true" cx="192" cy="96" r="18" fill="white" stroke="black" stroke-width="3"/>
+            <circle cx="196" cy="94" r="9" fill="black"/>
+            <circle cx="199" cy="91" r="3" fill="white"/>
+            <!-- Pysk / uśmiech -->
+            <path data-colorable="true" d="M 96 160 Q 150 190 204 160 Q 186 148 150 146 Q 114 148 96 160 Z" fill="white" stroke="black" stroke-width="4"/>
+            <!-- Nozdrza -->
+            <circle cx="138" cy="150" r="5" fill="black"/>
+            <circle cx="162" cy="150" r="5" fill="black"/>
+        </svg>`
+    },
+    {
+        id: 'jednorozec',
+        difficulty: 'medium',
+        title: '🦄 Jednorożec',
+        svg: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300">
+            <!-- Ogon -->
+            <path data-colorable="true" d="M 238 192 Q 284 168 278 220 Q 272 258 240 248" fill="white" stroke="black" stroke-width="4"/>
+            <path data-colorable="true" d="M 238 200 Q 296 188 284 240 Q 274 268 240 256" fill="white" stroke="black" stroke-width="3"/>
+            <!-- Tylna noga lewa -->
+            <rect data-colorable="true" x="148" y="230" width="28" height="60" rx="12" fill="white" stroke="black" stroke-width="4"/>
+            <ellipse data-colorable="true" cx="162" cy="290" rx="20" ry="10" fill="white" stroke="black" stroke-width="4"/>
+            <!-- Tylna noga prawa -->
+            <rect data-colorable="true" x="194" y="224" width="28" height="60" rx="12" fill="white" stroke="black" stroke-width="4"/>
+            <ellipse data-colorable="true" cx="208" cy="284" rx="20" ry="10" fill="white" stroke="black" stroke-width="4"/>
+            <!-- Ciało -->
+            <ellipse data-colorable="true" cx="180" cy="214" rx="100" ry="64" fill="white" stroke="black" stroke-width="5"/>
+            <!-- Przednia noga lewa -->
+            <rect data-colorable="true" x="90" y="236" width="28" height="58" rx="12" fill="white" stroke="black" stroke-width="4"/>
+            <ellipse data-colorable="true" cx="104" cy="294" rx="20" ry="10" fill="white" stroke="black" stroke-width="4"/>
+            <!-- Przednia noga prawa -->
+            <rect data-colorable="true" x="130" y="242" width="28" height="52" rx="12" fill="white" stroke="black" stroke-width="4"/>
+            <ellipse data-colorable="true" cx="144" cy="294" rx="20" ry="10" fill="white" stroke="black" stroke-width="4"/>
+            <!-- Szyja -->
+            <path data-colorable="true" d="M 96 186 L 88 128 Q 90 112 106 108 L 136 116 L 130 186 Z" fill="white" stroke="black" stroke-width="5"/>
+            <!-- Grzywa (pasma) -->
+            <path data-colorable="true" d="M 100 118 Q 72 130 68 158 Q 78 148 96 152" fill="white" stroke="black" stroke-width="4"/>
+            <path data-colorable="true" d="M 104 124 Q 72 142 70 174 Q 82 162 100 166" fill="white" stroke="black" stroke-width="3"/>
+            <!-- Głowa -->
+            <ellipse data-colorable="true" cx="96" cy="96" rx="54" ry="44" fill="white" stroke="black" stroke-width="5"/>
+            <!-- Róg -->
+            <polygon data-colorable="true" points="82,56 96,6 110,56" fill="white" stroke="black" stroke-width="4" stroke-linejoin="round"/>
+            <line x1="92" y1="46" x2="88" y2="26" stroke="black" stroke-width="2"/>
+            <line x1="100" y1="42" x2="102" y2="22" stroke="black" stroke-width="2"/>
+            <!-- Ucho lewe -->
+            <polygon data-colorable="true" points="54,62 44,36 72,56" fill="white" stroke="black" stroke-width="4" stroke-linejoin="round"/>
+            <!-- Ucho prawe -->
+            <polygon data-colorable="true" points="118,58 124,32 136,58" fill="white" stroke="black" stroke-width="4" stroke-linejoin="round"/>
+            <!-- Oko -->
+            <ellipse data-colorable="true" cx="80" cy="94" rx="14" ry="12" fill="white" stroke="black" stroke-width="4"/>
+            <circle cx="83" cy="94" r="6" fill="black"/>
+            <circle cx="85" cy="91" r="2" fill="white"/>
+            <!-- Nozdrze -->
+            <ellipse cx="60" cy="112" rx="6" ry="4" fill="black" transform="rotate(-10,60,112)"/>
+            <!-- Uśmiech -->
+            <path d="M 52 106 Q 62 118 74 112" fill="none" stroke="black" stroke-width="3" stroke-linecap="round"/>
+        </svg>`
+    },
     {
         id: 'kwiatek',
         difficulty: 'medium',
@@ -923,6 +989,122 @@ const IMAGES = [
         </svg>`
     },
     {
+        id: 'tecza',
+        difficulty: 'easy',
+        title: '🌈 Tęcza',
+        svg: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300">
+            <!-- Pasmo 1 (zewnętrzne) r=140→r=116, centrum (150,230) -->
+            <path data-colorable="true" d="M 10 230 A 140 140 0 0 1 290 230 L 266 230 A 116 116 0 0 0 34 230 Z" fill="white" stroke="none"/>
+            <!-- Pasmo 2: r=116→r=92 -->
+            <path data-colorable="true" d="M 34 230 A 116 116 0 0 1 266 230 L 242 230 A 92 92 0 0 0 58 230 Z" fill="white" stroke="none"/>
+            <!-- Pasmo 3: r=92→r=68 -->
+            <path data-colorable="true" d="M 58 230 A 92 92 0 0 1 242 230 L 218 230 A 68 68 0 0 0 82 230 Z" fill="white" stroke="none"/>
+            <!-- Pasmo 4 (wewnętrzne): r=68→r=44 -->
+            <path data-colorable="true" d="M 82 230 A 68 68 0 0 1 218 230 L 194 230 A 44 44 0 0 0 106 230 Z" fill="white" stroke="none"/>
+            <!-- Kontury łuków (pointer-events=none – nie blokują kliknięć na pasma) -->
+            <path pointer-events="none" d="M 10 230 A 140 140 0 0 1 290 230" fill="none" stroke="black" stroke-width="4" stroke-linecap="round"/>
+            <path pointer-events="none" d="M 34 230 A 116 116 0 0 1 266 230" fill="none" stroke="black" stroke-width="4" stroke-linecap="round"/>
+            <path pointer-events="none" d="M 58 230 A 92 92 0 0 1 242 230" fill="none" stroke="black" stroke-width="4" stroke-linecap="round"/>
+            <path pointer-events="none" d="M 82 230 A 68 68 0 0 1 218 230" fill="none" stroke="black" stroke-width="4" stroke-linecap="round"/>
+            <path pointer-events="none" d="M 106 230 A 44 44 0 0 1 194 230" fill="none" stroke="black" stroke-width="4" stroke-linecap="round"/>
+            <!-- Chmurka lewa (zakrywa końce łuków) -->
+            <ellipse data-colorable="true" cx="30" cy="234" rx="38" ry="28" fill="white" stroke="black" stroke-width="4"/>
+            <ellipse data-colorable="true" cx="6" cy="248" rx="22" ry="18" fill="white" stroke="black" stroke-width="4"/>
+            <ellipse data-colorable="true" cx="58" cy="248" rx="24" ry="18" fill="white" stroke="black" stroke-width="4"/>
+            <!-- Chmurka prawa -->
+            <ellipse data-colorable="true" cx="270" cy="234" rx="38" ry="28" fill="white" stroke="black" stroke-width="4"/>
+            <ellipse data-colorable="true" cx="242" cy="248" rx="24" ry="18" fill="white" stroke="black" stroke-width="4"/>
+            <ellipse data-colorable="true" cx="294" cy="248" rx="22" ry="18" fill="white" stroke="black" stroke-width="4"/>
+        </svg>`
+    },
+    {
+        id: 'jablko',
+        difficulty: 'easy',
+        title: '🍎 Jabłko',
+        svg: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300">
+            <!-- Ogonek -->
+            <path d="M 150 72 Q 160 48 178 38" fill="none" stroke="black" stroke-width="6" stroke-linecap="round"/>
+            <!-- Listek -->
+            <ellipse data-colorable="true" cx="178" cy="44" rx="22" ry="13" fill="white" stroke="black" stroke-width="4" transform="rotate(-30,178,44)"/>
+            <!-- Lewa połówka jabłka -->
+            <path data-colorable="true" d="M 150 82 Q 64 78 52 158 Q 44 230 150 264 Z" fill="white" stroke="black" stroke-width="5"/>
+            <!-- Prawa połówka jabłka -->
+            <path data-colorable="true" d="M 150 82 Q 236 78 248 158 Q 256 230 150 264 Z" fill="white" stroke="black" stroke-width="5"/>
+            <!-- Linia podziału -->
+            <line x1="150" y1="82" x2="150" y2="264" stroke="black" stroke-width="3" stroke-dasharray="6,5"/>
+            <!-- Wgłębienie górne -->
+            <path d="M 122 88 Q 150 74 178 88" fill="none" stroke="black" stroke-width="4" stroke-linecap="round"/>
+        </svg>`
+    },
+    {
+        id: 'kotek',
+        difficulty: 'easy',
+        title: '🐱 Kotek',
+        svg: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300">
+            <!-- Ciało -->
+            <ellipse data-colorable="true" cx="150" cy="220" rx="90" ry="70" fill="white" stroke="black" stroke-width="5"/>
+            <!-- Głowa -->
+            <circle data-colorable="true" cx="150" cy="120" r="75" fill="white" stroke="black" stroke-width="5"/>
+            <!-- Ucho lewe -->
+            <polygon data-colorable="true" points="90,68 70,22 122,62" fill="white" stroke="black" stroke-width="5" stroke-linejoin="round"/>
+            <!-- Ucho prawe -->
+            <polygon data-colorable="true" points="210,68 230,22 178,62" fill="white" stroke="black" stroke-width="5" stroke-linejoin="round"/>
+            <!-- Wnętrze ucha lewego -->
+            <polygon data-colorable="true" points="92,64 78,36 115,60" fill="white" stroke="black" stroke-width="3" stroke-linejoin="round"/>
+            <!-- Wnętrze ucha prawego -->
+            <polygon data-colorable="true" points="208,64 222,36 185,60" fill="white" stroke="black" stroke-width="3" stroke-linejoin="round"/>
+            <!-- Pysk -->
+            <ellipse data-colorable="true" cx="150" cy="146" rx="36" ry="25" fill="white" stroke="black" stroke-width="4"/>
+            <!-- Nos -->
+            <polygon data-colorable="true" points="150,128 141,140 159,140" fill="white" stroke="black" stroke-width="3" stroke-linejoin="round"/>
+            <!-- Uśmiech -->
+            <path d="M 141 140 Q 150 152 159 140" fill="none" stroke="black" stroke-width="3" stroke-linecap="round"/>
+            <!-- Lewe oko -->
+            <ellipse data-colorable="true" cx="118" cy="108" rx="16" ry="14" fill="white" stroke="black" stroke-width="4"/>
+            <circle cx="121" cy="108" r="7" fill="black"/>
+            <circle cx="123" cy="105" r="2" fill="white"/>
+            <!-- Prawe oko -->
+            <ellipse data-colorable="true" cx="182" cy="108" rx="16" ry="14" fill="white" stroke="black" stroke-width="4"/>
+            <circle cx="185" cy="108" r="7" fill="black"/>
+            <circle cx="187" cy="105" r="2" fill="white"/>
+            <!-- Wąsy lewe -->
+            <line x1="80" y1="140" x2="116" y2="143" stroke="black" stroke-width="3" stroke-linecap="round"/>
+            <line x1="80" y1="150" x2="116" y2="150" stroke="black" stroke-width="3" stroke-linecap="round"/>
+            <!-- Wąsy prawe -->
+            <line x1="220" y1="140" x2="184" y2="143" stroke="black" stroke-width="3" stroke-linecap="round"/>
+            <line x1="220" y1="150" x2="184" y2="150" stroke="black" stroke-width="3" stroke-linecap="round"/>
+            <!-- Ogon -->
+            <path data-colorable="true" d="M 236 240 Q 290 210 284 268 Q 260 286 236 268 Z" fill="white" stroke="black" stroke-width="4"/>
+        </svg>`
+    },
+    {
+        id: 'gwiazdka',
+        difficulty: 'easy',
+        title: '⭐ Gwiazdka',
+        svg: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300">
+            <!-- Gwiazda -->
+            <polygon data-colorable="true"
+                points="150,28 178,108 264,108 196,158 222,240 150,190 78,240 104,158 36,108 122,108"
+                fill="white" stroke="black" stroke-width="6" stroke-linejoin="round"/>
+            <!-- Buźka – oczy -->
+            <circle cx="126" cy="148" r="9" fill="black"/>
+            <circle cx="174" cy="148" r="9" fill="black"/>
+            <circle cx="130" cy="144" r="3" fill="white"/>
+            <circle cx="178" cy="144" r="3" fill="white"/>
+            <!-- Uśmiech -->
+            <path d="M 120 174 Q 150 198 180 174" fill="none" stroke="black" stroke-width="5" stroke-linecap="round"/>
+            <!-- Rumieńce -->
+            <ellipse data-colorable="true" cx="100" cy="176" rx="18" ry="10" fill="white" stroke="black" stroke-width="3"/>
+            <ellipse data-colorable="true" cx="200" cy="176" rx="18" ry="10" fill="white" stroke="black" stroke-width="3"/>
+            <!-- Blask górny lewy -->
+            <line x1="60" y1="55" x2="80" y2="75" stroke="black" stroke-width="4" stroke-linecap="round"/>
+            <line x1="50" y1="72" x2="74" y2="82" stroke="black" stroke-width="4" stroke-linecap="round"/>
+            <!-- Blask górny prawy -->
+            <line x1="240" y1="55" x2="220" y2="75" stroke="black" stroke-width="4" stroke-linecap="round"/>
+            <line x1="250" y1="72" x2="226" y2="82" stroke="black" stroke-width="4" stroke-linecap="round"/>
+        </svg>`
+    },
+    {
         id: 'ryba',
         difficulty: 'easy',
         title: '🐟 Rybka',
@@ -944,6 +1126,909 @@ const IMAGES = [
             <path d="M 175 95 Q 195 150 175 205" fill="none" stroke="black" stroke-width="3"/>
             <!-- Uśmiech -->
             <path d="M 45 148 Q 38 162 50 168" fill="none" stroke="black" stroke-width="3" stroke-linecap="round"/>
+        </svg>`
+    },
+    /* ── POZIOM TRUDNY ── */
+    {
+        id: 'smok',
+        difficulty: 'hard',
+        title: '🐉 Smok',
+        svg: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300">
+            <!-- Ogon segment 3 -->
+            <ellipse data-colorable="true" cx="272" cy="252" rx="22" ry="12" fill="white" stroke="black" stroke-width="3" transform="rotate(-30,272,252)"/>
+            <!-- Ogon segment 2 -->
+            <ellipse data-colorable="true" cx="248" cy="234" rx="26" ry="14" fill="white" stroke="black" stroke-width="3" transform="rotate(-20,248,234)"/>
+            <!-- Ogon segment 1 -->
+            <ellipse data-colorable="true" cx="218" cy="220" rx="30" ry="16" fill="white" stroke="black" stroke-width="4" transform="rotate(-10,218,220)"/>
+            <!-- Kolce ogona 1 -->
+            <polygon data-colorable="true" points="240,228 252,210 258,230" fill="white" stroke="black" stroke-width="3" stroke-linejoin="round"/>
+            <!-- Kolce ogona 2 -->
+            <polygon data-colorable="true" points="262,242 272,224 278,244" fill="white" stroke="black" stroke-width="3" stroke-linejoin="round"/>
+            <!-- Tylna noga lewa -->
+            <rect data-colorable="true" x="148" y="218" width="24" height="52" rx="10" fill="white" stroke="black" stroke-width="4"/>
+            <ellipse data-colorable="true" cx="160" cy="272" rx="18" ry="9" fill="white" stroke="black" stroke-width="3"/>
+            <!-- Pazury tylne lewe -->
+            <path data-colorable="true" d="M 148 270 Q 142 282 138 270" fill="white" stroke="black" stroke-width="3"/>
+            <path data-colorable="true" d="M 158 274 Q 152 286 148 274" fill="white" stroke="black" stroke-width="3"/>
+            <path data-colorable="true" d="M 172 270 Q 170 284 164 272" fill="white" stroke="black" stroke-width="3"/>
+            <!-- Tylna noga prawa -->
+            <rect data-colorable="true" x="190" y="212" width="24" height="52" rx="10" fill="white" stroke="black" stroke-width="4"/>
+            <ellipse data-colorable="true" cx="202" cy="266" rx="18" ry="9" fill="white" stroke="black" stroke-width="3"/>
+            <!-- Pazury tylne prawe -->
+            <path data-colorable="true" d="M 190 264 Q 184 276 180 264" fill="white" stroke="black" stroke-width="3"/>
+            <path data-colorable="true" d="M 200 268 Q 194 280 190 268" fill="white" stroke="black" stroke-width="3"/>
+            <path data-colorable="true" d="M 214 264 Q 212 278 206 266" fill="white" stroke="black" stroke-width="3"/>
+            <!-- Ciało -->
+            <ellipse data-colorable="true" cx="168" cy="200" rx="88" ry="58" fill="white" stroke="black" stroke-width="5"/>
+            <!-- Brzuch (łuski brzuszne) -->
+            <ellipse data-colorable="true" cx="168" cy="210" rx="52" ry="38" fill="white" stroke="black" stroke-width="4"/>
+            <!-- Łuski brzuszne linie -->
+            <path d="M 122 200 Q 168 206 214 200" fill="none" stroke="black" stroke-width="2"/>
+            <path d="M 120 212 Q 168 218 216 212" fill="none" stroke="black" stroke-width="2"/>
+            <path d="M 124 224 Q 168 230 212 224" fill="none" stroke="black" stroke-width="2"/>
+            <!-- Skrzydło lewe zewn. -->
+            <path data-colorable="true" d="M 126 170 Q 60 110 30 140 Q 50 170 80 168 Q 60 188 50 210 Q 90 198 106 182 Z" fill="white" stroke="black" stroke-width="4"/>
+            <!-- Żyłki skrzydła lewego -->
+            <line x1="126" y1="170" x2="72" y2="130" stroke="black" stroke-width="2"/>
+            <line x1="120" y1="175" x2="62" y2="180" stroke="black" stroke-width="2"/>
+            <line x1="114" y1="180" x2="58" y2="206" stroke="black" stroke-width="2"/>
+            <!-- Skrzydło prawe zewn. -->
+            <path data-colorable="true" d="M 210 170 Q 270 110 296 138 Q 278 170 248 168 Q 268 190 278 212 Q 238 198 222 182 Z" fill="white" stroke="black" stroke-width="4"/>
+            <!-- Żyłki skrzydła prawego -->
+            <line x1="210" y1="170" x2="264" y2="128" stroke="black" stroke-width="2"/>
+            <line x1="216" y1="175" x2="274" y2="178" stroke="black" stroke-width="2"/>
+            <line x1="222" y1="180" x2="276" y2="208" stroke="black" stroke-width="2"/>
+            <!-- Szyja -->
+            <path data-colorable="true" d="M 110 158 L 100 108 Q 104 92 118 90 L 142 96 L 138 158 Z" fill="white" stroke="black" stroke-width="4"/>
+            <!-- Kolce grzbietu -->
+            <polygon data-colorable="true" points="118,156 122,134 128,156" fill="white" stroke="black" stroke-width="3" stroke-linejoin="round"/>
+            <polygon data-colorable="true" points="130,154 136,128 142,154" fill="white" stroke="black" stroke-width="3" stroke-linejoin="round"/>
+            <polygon data-colorable="true" points="144,152 150,122 158,152" fill="white" stroke="black" stroke-width="3" stroke-linejoin="round"/>
+            <polygon data-colorable="true" points="160,152 166,126 174,152" fill="white" stroke="black" stroke-width="3" stroke-linejoin="round"/>
+            <!-- Głowa -->
+            <ellipse data-colorable="true" cx="98" cy="84" rx="50" ry="40" fill="white" stroke="black" stroke-width="5"/>
+            <!-- Pysk (szczęka) -->
+            <path data-colorable="true" d="M 56 90 Q 56 112 72 116 L 126 108 L 120 88 Z" fill="white" stroke="black" stroke-width="4"/>
+            <!-- Zęby -->
+            <polygon data-colorable="true" points="70,116 74,126 78,116" fill="white" stroke="black" stroke-width="2"/>
+            <polygon data-colorable="true" points="82,116 86,128 90,116" fill="white" stroke="black" stroke-width="2"/>
+            <polygon data-colorable="true" points="94,114 98,124 102,114" fill="white" stroke="black" stroke-width="2"/>
+            <!-- Nozdrze -->
+            <ellipse cx="68" cy="95" rx="5" ry="4" fill="black" transform="rotate(-15,68,95)"/>
+            <!-- Ucho/rożek lewy -->
+            <polygon data-colorable="true" points="68,52 58,24 84,48" fill="white" stroke="black" stroke-width="4" stroke-linejoin="round"/>
+            <!-- Ucho/rożek prawy -->
+            <polygon data-colorable="true" points="118,50 124,22 136,50" fill="white" stroke="black" stroke-width="4" stroke-linejoin="round"/>
+            <!-- Oko -->
+            <ellipse data-colorable="true" cx="86" cy="76" rx="14" ry="12" fill="white" stroke="black" stroke-width="4"/>
+            <ellipse data-colorable="true" cx="86" cy="76" rx="8" ry="9" fill="white" stroke="black" stroke-width="2"/>
+            <circle cx="89" cy="76" r="4" fill="black"/>
+            <circle cx="91" cy="74" r="1.5" fill="white"/>
+            <!-- Płomień -->
+            <path data-colorable="true" d="M 38 108 Q 18 90 24 68 Q 34 80 38 76 Q 30 56 42 40 Q 46 60 52 58 Q 44 36 62 24 Q 60 46 68 48 Q 72 30 88 28 Q 78 48 80 56 Q 90 38 104 38 Q 90 60 94 72 Q 98 60 108 62 Q 96 80 94 96 Q 72 86 58 98 Q 50 106 38 108 Z" fill="white" stroke="black" stroke-width="3"/>
+            <!-- Przednia noga prawa -->
+            <rect data-colorable="true" x="110" y="220" width="22" height="48" rx="9" fill="white" stroke="black" stroke-width="4"/>
+            <ellipse data-colorable="true" cx="121" cy="270" rx="16" ry="8" fill="white" stroke="black" stroke-width="3"/>
+            <path data-colorable="true" d="M 110 268 Q 104 280 100 268" fill="white" stroke="black" stroke-width="2"/>
+            <path data-colorable="true" d="M 120 272 Q 114 284 110 272" fill="white" stroke="black" stroke-width="2"/>
+            <path data-colorable="true" d="M 132 268 Q 130 280 124 270" fill="white" stroke="black" stroke-width="2"/>
+        </svg>`
+    },
+    {
+        id: 'zamek-sredniowieczny',
+        difficulty: 'hard',
+        title: '🏰 Twierdza',
+        svg: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300">
+            <!-- Niebo -->
+            <rect data-colorable="true" x="0" y="0" width="300" height="200" fill="white" stroke="none"/>
+            <!-- Księżyc -->
+            <circle data-colorable="true" cx="260" cy="36" r="22" fill="white" stroke="black" stroke-width="3"/>
+            <circle cx="270" cy="30" r="16" fill="white" stroke="none"/>
+            <!-- Chmura 1 -->
+            <ellipse data-colorable="true" cx="40" cy="44" rx="32" ry="18" fill="white" stroke="black" stroke-width="3"/>
+            <ellipse data-colorable="true" cx="66" cy="38" rx="22" ry="14" fill="white" stroke="black" stroke-width="3"/>
+            <ellipse data-colorable="true" cx="18" cy="50" rx="18" ry="12" fill="white" stroke="black" stroke-width="3"/>
+            <!-- Gwiazdy -->
+            <polygon data-colorable="true" points="120,22 123,32 133,32 125,38 128,48 120,42 112,48 115,38 107,32 117,32" fill="white" stroke="black" stroke-width="2"/>
+            <polygon data-colorable="true" points="180,14 182,20 188,20 183,24 185,30 180,26 175,30 177,24 172,20 178,20" fill="white" stroke="black" stroke-width="2"/>
+            <polygon data-colorable="true" points="220,48 222,54 228,54 223,58 225,64 220,60 215,64 217,58 212,54 218,54" fill="white" stroke="black" stroke-width="2"/>
+            <!-- Trawa -->
+            <rect data-colorable="true" x="0" y="276" width="300" height="24" rx="0" fill="white" stroke="black" stroke-width="3"/>
+            <!-- Fosa -->
+            <ellipse data-colorable="true" cx="150" cy="278" rx="82" ry="12" fill="white" stroke="black" stroke-width="3"/>
+            <!-- Lewa wieża boczna -->
+            <rect data-colorable="true" x="4" y="148" width="52" height="128" fill="white" stroke="black" stroke-width="4"/>
+            <!-- Blanki lewej wieży bocznej -->
+            <rect data-colorable="true" x="4" y="132" width="14" height="20" fill="white" stroke="black" stroke-width="3"/>
+            <rect data-colorable="true" x="24" y="132" width="14" height="20" fill="white" stroke="black" stroke-width="3"/>
+            <rect data-colorable="true" x="44" y="132" width="14" height="20" fill="white" stroke="black" stroke-width="3"/>
+            <!-- Szczeliny strzelnicze lewej wieży -->
+            <rect data-colorable="true" x="20" y="172" width="10" height="22" rx="3" fill="white" stroke="black" stroke-width="3"/>
+            <rect data-colorable="true" x="36" y="172" width="10" height="22" rx="3" fill="white" stroke="black" stroke-width="3"/>
+            <!-- Prawa wieża boczna -->
+            <rect data-colorable="true" x="244" y="148" width="52" height="128" fill="white" stroke="black" stroke-width="4"/>
+            <!-- Blanki prawej wieży bocznej -->
+            <rect data-colorable="true" x="244" y="132" width="14" height="20" fill="white" stroke="black" stroke-width="3"/>
+            <rect data-colorable="true" x="264" y="132" width="14" height="20" fill="white" stroke="black" stroke-width="3"/>
+            <rect data-colorable="true" x="282" y="132" width="14" height="20" fill="white" stroke="black" stroke-width="3"/>
+            <!-- Szczeliny strzelnicze prawej wieży -->
+            <rect data-colorable="true" x="254" y="172" width="10" height="22" rx="3" fill="white" stroke="black" stroke-width="3"/>
+            <rect data-colorable="true" x="272" y="172" width="10" height="22" rx="3" fill="white" stroke="black" stroke-width="3"/>
+            <!-- Mur lewostronny -->
+            <rect data-colorable="true" x="56" y="182" width="50" height="94" fill="white" stroke="black" stroke-width="4"/>
+            <!-- Blanki muru lewego -->
+            <rect data-colorable="true" x="56" y="170" width="12" height="16" fill="white" stroke="black" stroke-width="3"/>
+            <rect data-colorable="true" x="74" y="170" width="12" height="16" fill="white" stroke="black" stroke-width="3"/>
+            <rect data-colorable="true" x="92" y="170" width="12" height="16" fill="white" stroke="black" stroke-width="3"/>
+            <!-- Mur prawostronny -->
+            <rect data-colorable="true" x="194" y="182" width="50" height="94" fill="white" stroke="black" stroke-width="4"/>
+            <!-- Blanki muru prawego -->
+            <rect data-colorable="true" x="196" y="170" width="12" height="16" fill="white" stroke="black" stroke-width="3"/>
+            <rect data-colorable="true" x="214" y="170" width="12" height="16" fill="white" stroke="black" stroke-width="3"/>
+            <rect data-colorable="true" x="232" y="170" width="12" height="16" fill="white" stroke="black" stroke-width="3"/>
+            <!-- Środkowa wieża main -->
+            <rect data-colorable="true" x="100" y="110" width="100" height="166" fill="white" stroke="black" stroke-width="5"/>
+            <!-- Dach wieży środkowej -->
+            <polygon data-colorable="true" points="96,110 150,52 204,110" fill="white" stroke="black" stroke-width="4" stroke-linejoin="round"/>
+            <!-- Flaga na wieży -->
+            <line x1="150" y1="52" x2="150" y2="18" stroke="black" stroke-width="3"/>
+            <polygon data-colorable="true" points="150,18 150,42 184,30" fill="white" stroke="black" stroke-width="3" stroke-linejoin="round"/>
+            <!-- Blanki wieży środkowej -->
+            <rect data-colorable="true" x="100" y="94" width="16" height="20" fill="white" stroke="black" stroke-width="3"/>
+            <rect data-colorable="true" x="122" y="94" width="16" height="20" fill="white" stroke="black" stroke-width="3"/>
+            <rect data-colorable="true" x="144" y="94" width="16" height="20" fill="white" stroke="black" stroke-width="3"/>
+            <rect data-colorable="true" x="166" y="94" width="16" height="20" fill="white" stroke="black" stroke-width="3"/>
+            <rect data-colorable="true" x="186" y="94" width="16" height="20" fill="white" stroke="black" stroke-width="3"/>
+            <!-- Okno wieży górne lewe -->
+            <rect data-colorable="true" x="112" y="130" width="28" height="36" rx="14" fill="white" stroke="black" stroke-width="3"/>
+            <!-- Okno wieży górne prawe -->
+            <rect data-colorable="true" x="160" y="130" width="28" height="36" rx="14" fill="white" stroke="black" stroke-width="3"/>
+            <!-- Brama główna -->
+            <path data-colorable="true" d="M 118 276 L 118 226 Q 150 200 182 226 L 182 276 Z" fill="white" stroke="black" stroke-width="4"/>
+            <!-- Kratownica bramy -->
+            <line x1="118" y1="242" x2="182" y2="242" stroke="black" stroke-width="3"/>
+            <line x1="118" y1="256" x2="182" y2="256" stroke="black" stroke-width="3"/>
+            <line x1="134" y1="226" x2="134" y2="276" stroke="black" stroke-width="3"/>
+            <line x1="150" y1="218" x2="150" y2="276" stroke="black" stroke-width="3"/>
+            <line x1="166" y1="226" x2="166" y2="276" stroke="black" stroke-width="3"/>
+            <!-- Most zwodzony -->
+            <rect data-colorable="true" x="118" y="272" width="64" height="12" rx="4" fill="white" stroke="black" stroke-width="3"/>
+            <!-- Łańcuchy mostu -->
+            <line x1="118" y1="272" x2="106" y2="256" stroke="black" stroke-width="3"/>
+            <line x1="182" y1="272" x2="194" y2="256" stroke="black" stroke-width="3"/>
+        </svg>`
+    },
+    {
+        id: 'parowoz',
+        difficulty: 'hard',
+        title: '🚂 Parowóz',
+        svg: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300">
+            <!-- Tory -->
+            <line x1="0" y1="256" x2="300" y2="256" stroke="black" stroke-width="4"/>
+            <line x1="0" y1="270" x2="300" y2="270" stroke="black" stroke-width="4"/>
+            <line x1="16" y1="256" x2="16" y2="270" stroke="black" stroke-width="5" stroke-linecap="round"/>
+            <line x1="44" y1="256" x2="44" y2="270" stroke="black" stroke-width="5" stroke-linecap="round"/>
+            <line x1="72" y1="256" x2="72" y2="270" stroke="black" stroke-width="5" stroke-linecap="round"/>
+            <line x1="100" y1="256" x2="100" y2="270" stroke="black" stroke-width="5" stroke-linecap="round"/>
+            <line x1="128" y1="256" x2="128" y2="270" stroke="black" stroke-width="5" stroke-linecap="round"/>
+            <line x1="156" y1="256" x2="156" y2="270" stroke="black" stroke-width="5" stroke-linecap="round"/>
+            <line x1="184" y1="256" x2="184" y2="270" stroke="black" stroke-width="5" stroke-linecap="round"/>
+            <line x1="212" y1="256" x2="212" y2="270" stroke="black" stroke-width="5" stroke-linecap="round"/>
+            <line x1="240" y1="256" x2="240" y2="270" stroke="black" stroke-width="5" stroke-linecap="round"/>
+            <line x1="268" y1="256" x2="268" y2="270" stroke="black" stroke-width="5" stroke-linecap="round"/>
+            <!-- Dym chmurki -->
+            <circle data-colorable="true" cx="54" cy="56" r="14" fill="white" stroke="black" stroke-width="3"/>
+            <circle data-colorable="true" cx="72" cy="44" r="20" fill="white" stroke="black" stroke-width="3"/>
+            <circle data-colorable="true" cx="96" cy="36" r="16" fill="white" stroke="black" stroke-width="3"/>
+            <circle data-colorable="true" cx="116" cy="48" r="12" fill="white" stroke="black" stroke-width="3"/>
+            <!-- Komin 1 -->
+            <rect data-colorable="true" x="46" y="116" width="20" height="38" rx="3" fill="white" stroke="black" stroke-width="4"/>
+            <rect data-colorable="true" x="40" y="112" width="32" height="10" rx="5" fill="white" stroke="black" stroke-width="3"/>
+            <!-- Kocioł -->
+            <rect data-colorable="true" x="24" y="152" width="152" height="70" rx="14" fill="white" stroke="black" stroke-width="5"/>
+            <!-- Kopuła kotła -->
+            <ellipse data-colorable="true" cx="100" cy="152" rx="28" ry="16" fill="white" stroke="black" stroke-width="4"/>
+            <!-- Komin 2 (piasecznica) -->
+            <ellipse data-colorable="true" cx="72" cy="152" rx="18" ry="12" fill="white" stroke="black" stroke-width="4"/>
+            <!-- Kabina maszynisty -->
+            <rect data-colorable="true" x="155" y="126" width="72" height="96" rx="8" fill="white" stroke="black" stroke-width="5"/>
+            <!-- Dach kabiny -->
+            <rect data-colorable="true" x="148" y="118" width="88" height="16" rx="6" fill="white" stroke="black" stroke-width="4"/>
+            <!-- Okno kabiny lewe -->
+            <rect data-colorable="true" x="163" y="138" width="26" height="30" rx="5" fill="white" stroke="black" stroke-width="3"/>
+            <line x1="176" y1="138" x2="176" y2="168" stroke="black" stroke-width="2"/>
+            <line x1="163" y1="153" x2="189" y2="153" stroke="black" stroke-width="2"/>
+            <!-- Okno kabiny prawe -->
+            <rect data-colorable="true" x="199" y="138" width="22" height="30" rx="5" fill="white" stroke="black" stroke-width="3"/>
+            <!-- Zderzak przedni -->
+            <rect data-colorable="true" x="8" y="196" width="22" height="14" rx="4" fill="white" stroke="black" stroke-width="3"/>
+            <!-- Reflektor -->
+            <ellipse data-colorable="true" cx="20" cy="180" rx="12" ry="10" fill="white" stroke="black" stroke-width="3"/>
+            <!-- Korbowód + drążek -->
+            <line x1="56" y1="232" x2="128" y2="232" stroke="black" stroke-width="5" stroke-linecap="round"/>
+            <line x1="128" y1="232" x2="176" y2="232" stroke="black" stroke-width="4" stroke-linecap="round"/>
+            <!-- Duże koło napędowe -->
+            <circle data-colorable="true" cx="122" cy="234" r="34" fill="white" stroke="black" stroke-width="5"/>
+            <circle data-colorable="true" cx="122" cy="234" r="22" fill="white" stroke="black" stroke-width="3"/>
+            <circle data-colorable="true" cx="122" cy="234" r="10" fill="white" stroke="black" stroke-width="3"/>
+            <circle cx="122" cy="234" r="4" fill="black"/>
+            <!-- Szprychy koła napędowego -->
+            <line x1="122" y1="200" x2="122" y2="212" stroke="black" stroke-width="3"/>
+            <line x1="122" y1="256" x2="122" y2="268" stroke="black" stroke-width="3"/>
+            <line x1="88" y1="234" x2="100" y2="234" stroke="black" stroke-width="3"/>
+            <line x1="144" y1="234" x2="156" y2="234" stroke="black" stroke-width="3"/>
+            <line x1="98" y1="210" x2="106" y2="218" stroke="black" stroke-width="3"/>
+            <line x1="138" y1="250" x2="146" y2="258" stroke="black" stroke-width="3"/>
+            <line x1="146" y1="210" x2="138" y2="218" stroke="black" stroke-width="3"/>
+            <line x1="98" y1="258" x2="106" y2="250" stroke="black" stroke-width="3"/>
+            <!-- Małe koło przednie -->
+            <circle data-colorable="true" cx="44" cy="240" r="20" fill="white" stroke="black" stroke-width="4"/>
+            <circle data-colorable="true" cx="44" cy="240" r="10" fill="white" stroke="black" stroke-width="3"/>
+            <circle cx="44" cy="240" r="4" fill="black"/>
+            <!-- Koło kabiny -->
+            <circle data-colorable="true" cx="184" cy="240" r="20" fill="white" stroke="black" stroke-width="4"/>
+            <circle data-colorable="true" cx="184" cy="240" r="10" fill="white" stroke="black" stroke-width="3"/>
+            <circle cx="184" cy="240" r="4" fill="black"/>
+            <!-- Wagon towarowy -->
+            <rect data-colorable="true" x="224" y="178" width="72" height="60" rx="8" fill="white" stroke="black" stroke-width="4"/>
+            <!-- Deski wagonu -->
+            <line x1="224" y1="198" x2="296" y2="198" stroke="black" stroke-width="2"/>
+            <line x1="224" y1="218" x2="296" y2="218" stroke="black" stroke-width="2"/>
+            <line x1="248" y1="178" x2="248" y2="238" stroke="black" stroke-width="2"/>
+            <line x1="272" y1="178" x2="272" y2="238" stroke="black" stroke-width="2"/>
+            <!-- Koła wagonu -->
+            <circle data-colorable="true" cx="242" cy="246" r="16" fill="white" stroke="black" stroke-width="4"/>
+            <circle cx="242" cy="246" r="5" fill="black"/>
+            <circle data-colorable="true" cx="280" cy="246" r="16" fill="white" stroke="black" stroke-width="4"/>
+            <circle cx="280" cy="246" r="5" fill="black"/>
+            <!-- Sprzęg -->
+            <line x1="218" y1="218" x2="224" y2="218" stroke="black" stroke-width="5" stroke-linecap="round"/>
+        </svg>`
+    },
+    {
+        id: 'wioska',
+        difficulty: 'hard',
+        title: '🏘️ Wioska',
+        svg: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300">
+            <!-- Niebo -->
+            <rect data-colorable="true" x="0" y="0" width="300" height="190" fill="white" stroke="none"/>
+            <!-- Słońce -->
+            <circle data-colorable="true" cx="256" cy="38" r="26" fill="white" stroke="black" stroke-width="4"/>
+            <line x1="256" y1="6" x2="256" y2="0" stroke="black" stroke-width="4" stroke-linecap="round"/>
+            <line x1="278" y1="16" x2="282" y2="12" stroke="black" stroke-width="4" stroke-linecap="round"/>
+            <line x1="288" y1="38" x2="294" y2="38" stroke="black" stroke-width="4" stroke-linecap="round"/>
+            <line x1="278" y1="60" x2="282" y2="64" stroke="black" stroke-width="4" stroke-linecap="round"/>
+            <line x1="234" y1="16" x2="230" y2="12" stroke="black" stroke-width="4" stroke-linecap="round"/>
+            <line x1="224" y1="38" x2="218" y2="38" stroke="black" stroke-width="4" stroke-linecap="round"/>
+            <line x1="234" y1="60" x2="230" y2="64" stroke="black" stroke-width="4" stroke-linecap="round"/>
+            <!-- Chmura -->
+            <ellipse data-colorable="true" cx="84" cy="36" rx="34" ry="20" fill="white" stroke="black" stroke-width="3"/>
+            <ellipse data-colorable="true" cx="110" cy="28" rx="24" ry="16" fill="white" stroke="black" stroke-width="3"/>
+            <ellipse data-colorable="true" cx="58" cy="42" rx="20" ry="14" fill="white" stroke="black" stroke-width="3"/>
+            <!-- Trawa -->
+            <rect data-colorable="true" x="0" y="240" width="300" height="60" fill="white" stroke="black" stroke-width="3"/>
+            <!-- Droga -->
+            <path data-colorable="true" d="M 120 300 L 130 240 L 170 240 L 180 300 Z" fill="white" stroke="black" stroke-width="3"/>
+            <line x1="150" y1="252" x2="150" y2="270" stroke="black" stroke-width="3" stroke-dasharray="8,6"/>
+            <!-- Domek lewy -->
+            <!-- Dach lewy -->
+            <polygon data-colorable="true" points="18,144 80,92 142,144" fill="white" stroke="black" stroke-width="4" stroke-linejoin="round"/>
+            <!-- Ściana lewa -->
+            <rect data-colorable="true" x="28" y="142" width="104" height="100" fill="white" stroke="black" stroke-width="4"/>
+            <!-- Drzwi lewe -->
+            <rect data-colorable="true" x="68" y="200" width="24" height="42" rx="12" fill="white" stroke="black" stroke-width="3"/>
+            <!-- Okno lewe dół -->
+            <rect data-colorable="true" x="100" y="200" width="24" height="22" rx="4" fill="white" stroke="black" stroke-width="3"/>
+            <line x1="112" y1="200" x2="112" y2="222" stroke="black" stroke-width="2"/>
+            <line x1="100" y1="211" x2="124" y2="211" stroke="black" stroke-width="2"/>
+            <!-- Okno lewe górne -->
+            <rect data-colorable="true" x="36" y="162" width="24" height="22" rx="4" fill="white" stroke="black" stroke-width="3"/>
+            <line x1="48" y1="162" x2="48" y2="184" stroke="black" stroke-width="2"/>
+            <line x1="36" y1="173" x2="60" y2="173" stroke="black" stroke-width="2"/>
+            <!-- Komin lewy -->
+            <rect data-colorable="true" x="106" y="98" width="20" height="46" fill="white" stroke="black" stroke-width="3"/>
+            <!-- Płot lewy -->
+            <line x1="0" y1="260" x2="120" y2="260" stroke="black" stroke-width="3"/>
+            <rect data-colorable="true" x="6" y="248" width="8" height="18" rx="2" fill="white" stroke="black" stroke-width="2"/>
+            <rect data-colorable="true" x="24" y="248" width="8" height="18" rx="2" fill="white" stroke="black" stroke-width="2"/>
+            <rect data-colorable="true" x="42" y="248" width="8" height="18" rx="2" fill="white" stroke="black" stroke-width="2"/>
+            <rect data-colorable="true" x="60" y="248" width="8" height="18" rx="2" fill="white" stroke="black" stroke-width="2"/>
+            <rect data-colorable="true" x="78" y="248" width="8" height="18" rx="2" fill="white" stroke="black" stroke-width="2"/>
+            <rect data-colorable="true" x="96" y="248" width="8" height="18" rx="2" fill="white" stroke="black" stroke-width="2"/>
+            <rect data-colorable="true" x="112" y="248" width="8" height="18" rx="2" fill="white" stroke="black" stroke-width="2"/>
+            <!-- Domek prawy -->
+            <!-- Dach prawy -->
+            <polygon data-colorable="true" points="160,138 222,86 284,138" fill="white" stroke="black" stroke-width="4" stroke-linejoin="round"/>
+            <!-- Ściana prawa -->
+            <rect data-colorable="true" x="170" y="136" width="104" height="104" fill="white" stroke="black" stroke-width="4"/>
+            <!-- Drzwi prawe -->
+            <rect data-colorable="true" x="210" y="196" width="24" height="44" rx="12" fill="white" stroke="black" stroke-width="3"/>
+            <!-- Okno prawe dół lewe -->
+            <rect data-colorable="true" x="176" y="196" width="22" height="22" rx="4" fill="white" stroke="black" stroke-width="3"/>
+            <line x1="187" y1="196" x2="187" y2="218" stroke="black" stroke-width="2"/>
+            <line x1="176" y1="207" x2="198" y2="207" stroke="black" stroke-width="2"/>
+            <!-- Okno prawe dół prawe -->
+            <rect data-colorable="true" x="248" y="196" width="22" height="22" rx="4" fill="white" stroke="black" stroke-width="3"/>
+            <line x1="259" y1="196" x2="259" y2="218" stroke="black" stroke-width="2"/>
+            <line x1="248" y1="207" x2="270" y2="207" stroke="black" stroke-width="2"/>
+            <!-- Okno prawe górne -->
+            <rect data-colorable="true" x="214" y="152" width="16" height="24" rx="8" fill="white" stroke="black" stroke-width="3"/>
+            <!-- Komin prawy -->
+            <rect data-colorable="true" x="256" y="90" width="18" height="48" fill="white" stroke="black" stroke-width="3"/>
+            <!-- Dymek z komina -->
+            <circle data-colorable="true" cx="262" cy="82" r="10" fill="white" stroke="black" stroke-width="3"/>
+            <circle data-colorable="true" cx="270" cy="70" r="14" fill="white" stroke="black" stroke-width="3"/>
+            <!-- Płot prawy -->
+            <line x1="180" y1="260" x2="300" y2="260" stroke="black" stroke-width="3"/>
+            <rect data-colorable="true" x="186" y="248" width="8" height="18" rx="2" fill="white" stroke="black" stroke-width="2"/>
+            <rect data-colorable="true" x="204" y="248" width="8" height="18" rx="2" fill="white" stroke="black" stroke-width="2"/>
+            <rect data-colorable="true" x="222" y="248" width="8" height="18" rx="2" fill="white" stroke="black" stroke-width="2"/>
+            <rect data-colorable="true" x="240" y="248" width="8" height="18" rx="2" fill="white" stroke="black" stroke-width="2"/>
+            <rect data-colorable="true" x="258" y="248" width="8" height="18" rx="2" fill="white" stroke="black" stroke-width="2"/>
+            <rect data-colorable="true" x="276" y="248" width="8" height="18" rx="2" fill="white" stroke="black" stroke-width="2"/>
+            <rect data-colorable="true" x="290" y="248" width="8" height="18" rx="2" fill="white" stroke="black" stroke-width="2"/>
+            <!-- Drzewo -->
+            <rect data-colorable="true" x="143" y="210" width="14" height="30" rx="4" fill="white" stroke="black" stroke-width="3"/>
+            <circle data-colorable="true" cx="150" cy="196" r="22" fill="white" stroke="black" stroke-width="4"/>
+            <circle data-colorable="true" cx="136" cy="206" r="16" fill="white" stroke="black" stroke-width="3"/>
+            <circle data-colorable="true" cx="164" cy="206" r="16" fill="white" stroke="black" stroke-width="3"/>
+        </svg>`
+    },
+    {
+        id: 'rekin',
+        difficulty: 'hard',
+        title: '🦈 Rekin z rafą',
+        svg: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300">
+            <!-- Woda tło -->
+            <rect data-colorable="true" x="0" y="0" width="300" height="300" fill="white" stroke="none"/>
+            <!-- Fale powierzchni -->
+            <path data-colorable="true" d="M 0 52 Q 38 38 75 52 Q 112 66 150 52 Q 188 38 225 52 Q 262 66 300 52 L 300 0 L 0 0 Z" fill="white" stroke="black" stroke-width="3"/>
+            <!-- Bąbelki -->
+            <circle data-colorable="true" cx="48" cy="90" r="7" fill="white" stroke="black" stroke-width="3"/>
+            <circle data-colorable="true" cx="60" cy="72" r="5" fill="white" stroke="black" stroke-width="3"/>
+            <circle data-colorable="true" cx="36" cy="108" r="4" fill="white" stroke="black" stroke-width="3"/>
+            <circle data-colorable="true" cx="244" cy="78" r="6" fill="white" stroke="black" stroke-width="3"/>
+            <circle data-colorable="true" cx="258" cy="60" r="4" fill="white" stroke="black" stroke-width="3"/>
+            <!-- Koralowiec lewy -->
+            <path data-colorable="true" d="M 24 270 L 24 220 Q 16 200 24 188 Q 32 200 28 220 L 32 220 L 32 200 Q 24 184 36 172 Q 44 184 40 198 L 40 220 L 44 220 L 44 200 Q 50 186 58 196 Q 56 210 48 220 L 48 270 Z" fill="white" stroke="black" stroke-width="3"/>
+            <!-- Koralowiec okrągły lewy -->
+            <circle data-colorable="true" cx="24" cy="186" r="10" fill="white" stroke="black" stroke-width="3"/>
+            <circle data-colorable="true" cx="36" cy="170" r="10" fill="white" stroke="black" stroke-width="3"/>
+            <circle data-colorable="true" cx="50" cy="194" r="10" fill="white" stroke="black" stroke-width="3"/>
+            <!-- Koralowiec prawy -->
+            <path data-colorable="true" d="M 256 270 L 256 230 Q 248 212 256 200 Q 264 212 260 230 L 264 230 L 264 210 Q 258 194 268 186 Q 276 196 272 212 L 272 230 L 276 270 Z" fill="white" stroke="black" stroke-width="3"/>
+            <circle data-colorable="true" cx="256" cy="198" r="10" fill="white" stroke="black" stroke-width="3"/>
+            <circle data-colorable="true" cx="268" cy="184" r="10" fill="white" stroke="black" stroke-width="3"/>
+            <!-- Trawa morska -->
+            <path data-colorable="true" d="M 80 270 Q 76 246 84 234 Q 88 246 84 270 Z" fill="white" stroke="black" stroke-width="3"/>
+            <path data-colorable="true" d="M 90 270 Q 88 248 96 238 Q 98 252 94 270 Z" fill="white" stroke="black" stroke-width="3"/>
+            <path data-colorable="true" d="M 100 270 Q 96 252 104 242 Q 108 254 104 270 Z" fill="white" stroke="black" stroke-width="3"/>
+            <path data-colorable="true" d="M 200 270 Q 196 248 204 238 Q 208 250 204 270 Z" fill="white" stroke="black" stroke-width="3"/>
+            <path data-colorable="true" d="M 212 270 Q 208 252 216 242 Q 220 254 216 270 Z" fill="white" stroke="black" stroke-width="3"/>
+            <!-- Dno -->
+            <path data-colorable="true" d="M 0 270 Q 75 258 150 270 Q 225 282 300 270 L 300 300 L 0 300 Z" fill="white" stroke="black" stroke-width="3"/>
+            <!-- Rekin – ogon -->
+            <polygon data-colorable="true" points="240,142 288,110 288,174" fill="white" stroke="black" stroke-width="4" stroke-linejoin="round"/>
+            <!-- Rekin – ciało -->
+            <ellipse data-colorable="true" cx="148" cy="148" rx="110" ry="50" fill="white" stroke="black" stroke-width="5"/>
+            <!-- Rekin – brzuch -->
+            <ellipse data-colorable="true" cx="148" cy="164" rx="80" ry="28" fill="white" stroke="black" stroke-width="3"/>
+            <!-- Rekin – płetwa grzbietowa -->
+            <polygon data-colorable="true" points="130,100 148,58 180,100" fill="white" stroke="black" stroke-width="4" stroke-linejoin="round"/>
+            <!-- Rekin – płetwa ogonowa górna -->
+            <polygon data-colorable="true" points="238,142 262,106 270,142" fill="white" stroke="black" stroke-width="3" stroke-linejoin="round"/>
+            <!-- Rekin – płetwa boczna lewa -->
+            <polygon data-colorable="true" points="120,158 88,188 132,172" fill="white" stroke="black" stroke-width="3" stroke-linejoin="round"/>
+            <!-- Rekin – płetwa boczna prawa -->
+            <polygon data-colorable="true" points="168,162 196,192 172,174" fill="white" stroke="black" stroke-width="3" stroke-linejoin="round"/>
+            <!-- Rekin – głowa -->
+            <path data-colorable="true" d="M 40 148 Q 26 130 30 110 Q 44 102 60 116 L 60 180 Q 44 194 30 186 Q 26 166 40 148 Z" fill="white" stroke="black" stroke-width="4"/>
+            <!-- Rekin – zęby górne -->
+            <polygon data-colorable="true" points="44,130 48,140 52,130" fill="white" stroke="black" stroke-width="2"/>
+            <polygon data-colorable="true" points="52,128 56,138 60,128" fill="white" stroke="black" stroke-width="2"/>
+            <!-- Rekin – zęby dolne -->
+            <polygon data-colorable="true" points="46,166 50,156 54,166" fill="white" stroke="black" stroke-width="2"/>
+            <polygon data-colorable="true" points="54,168 58,158 62,168" fill="white" stroke="black" stroke-width="2"/>
+            <!-- Oko rekina -->
+            <circle data-colorable="true" cx="46" cy="128" r="10" fill="white" stroke="black" stroke-width="3"/>
+            <circle cx="46" cy="128" r="5" fill="black"/>
+            <circle cx="48" cy="126" r="2" fill="white"/>
+            <!-- Mała rybka -->
+            <ellipse data-colorable="true" cx="190" cy="220" rx="28" ry="14" fill="white" stroke="black" stroke-width="3"/>
+            <polygon data-colorable="true" points="218,220 234,208 234,232" fill="white" stroke="black" stroke-width="3" stroke-linejoin="round"/>
+            <circle cx="174" cy="216" r="5" fill="white" stroke="black" stroke-width="2"/>
+            <circle cx="174" cy="216" r="2" fill="black"/>
+            <!-- Płetwa rybki -->
+            <path data-colorable="true" d="M 192 206 Q 200 196 210 206" fill="white" stroke="black" stroke-width="2"/>
+        </svg>`
+    },
+    {
+        id: 'astronauta',
+        difficulty: 'hard',
+        title: '👨‍🚀 Astronauta',
+        svg: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300">
+            <!-- Tło kosmosu -->
+            <rect data-colorable="true" x="0" y="0" width="300" height="300" fill="white" stroke="none"/>
+            <!-- Gwiazdy małe -->
+            <circle data-colorable="true" cx="18" cy="22" r="3" fill="white" stroke="black" stroke-width="2"/>
+            <circle data-colorable="true" cx="48" cy="14" r="2" fill="white" stroke="black" stroke-width="2"/>
+            <circle data-colorable="true" cx="78" cy="34" r="3" fill="white" stroke="black" stroke-width="2"/>
+            <circle data-colorable="true" cx="120" cy="18" r="2" fill="white" stroke="black" stroke-width="2"/>
+            <circle data-colorable="true" cx="220" cy="26" r="3" fill="white" stroke="black" stroke-width="2"/>
+            <circle data-colorable="true" cx="264" cy="14" r="2" fill="white" stroke="black" stroke-width="2"/>
+            <circle data-colorable="true" cx="284" cy="44" r="3" fill="white" stroke="black" stroke-width="2"/>
+            <circle data-colorable="true" cx="246" cy="56" r="2" fill="white" stroke="black" stroke-width="2"/>
+            <circle data-colorable="true" cx="30" cy="70" r="2" fill="white" stroke="black" stroke-width="2"/>
+            <circle data-colorable="true" cx="12" cy="120" r="3" fill="white" stroke="black" stroke-width="2"/>
+            <circle data-colorable="true" cx="280" cy="110" r="2" fill="white" stroke="black" stroke-width="2"/>
+            <!-- Planeta za astronautą -->
+            <circle data-colorable="true" cx="248" cy="228" r="56" fill="white" stroke="black" stroke-width="4"/>
+            <ellipse data-colorable="true" cx="248" cy="228" rx="80" ry="20" fill="white" stroke="black" stroke-width="3" transform="rotate(-15,248,228)"/>
+            <!-- Krater 1 -->
+            <ellipse data-colorable="true" cx="238" cy="212" rx="14" ry="10" fill="white" stroke="black" stroke-width="2"/>
+            <!-- Krater 2 -->
+            <ellipse data-colorable="true" cx="262" cy="238" rx="10" ry="7" fill="white" stroke="black" stroke-width="2"/>
+            <!-- Buty astronauty -->
+            <ellipse data-colorable="true" cx="118" cy="284" rx="28" ry="14" fill="white" stroke="black" stroke-width="4"/>
+            <ellipse data-colorable="true" cx="182" cy="284" rx="28" ry="14" fill="white" stroke="black" stroke-width="4"/>
+            <!-- Nogi skafandra -->
+            <rect data-colorable="true" x="96" y="230" width="42" height="60" rx="16" fill="white" stroke="black" stroke-width="4"/>
+            <rect data-colorable="true" x="162" y="230" width="42" height="60" rx="16" fill="white" stroke="black" stroke-width="4"/>
+            <!-- Pas skafandra (linia) -->
+            <rect data-colorable="true" x="88" y="224" width="124" height="18" rx="8" fill="white" stroke="black" stroke-width="4"/>
+            <!-- Klamra pasa -->
+            <rect data-colorable="true" x="136" y="222" width="28" height="22" rx="4" fill="white" stroke="black" stroke-width="3"/>
+            <!-- Tułów skafandra -->
+            <rect data-colorable="true" x="82" y="148" width="136" height="88" rx="22" fill="white" stroke="black" stroke-width="5"/>
+            <!-- Panel kontrolny na klatce -->
+            <rect data-colorable="true" x="102" y="172" width="40" height="44" rx="6" fill="white" stroke="black" stroke-width="3"/>
+            <rect data-colorable="true" x="108" y="178" width="12" height="10" rx="2" fill="white" stroke="black" stroke-width="2"/>
+            <rect data-colorable="true" x="124" y="178" width="12" height="10" rx="2" fill="white" stroke="black" stroke-width="2"/>
+            <circle data-colorable="true" cx="112" cy="200" r="5" fill="white" stroke="black" stroke-width="2"/>
+            <circle data-colorable="true" cx="126" cy="200" r="5" fill="white" stroke="black" stroke-width="2"/>
+            <!-- Butelka tlenu -->
+            <rect data-colorable="true" x="162" y="160" width="38" height="68" rx="10" fill="white" stroke="black" stroke-width="3"/>
+            <rect data-colorable="true" x="170" y="152" width="22" height="14" rx="6" fill="white" stroke="black" stroke-width="3"/>
+            <!-- Rękaw lewy -->
+            <rect data-colorable="true" x="52" y="154" width="36" height="80" rx="16" fill="white" stroke="black" stroke-width="4"/>
+            <!-- Rękawica lewa -->
+            <ellipse data-colorable="true" cx="70" cy="240" rx="24" ry="16" fill="white" stroke="black" stroke-width="4"/>
+            <!-- Kciuk lewy -->
+            <ellipse data-colorable="true" cx="48" cy="230" rx="10" ry="7" fill="white" stroke="black" stroke-width="3" transform="rotate(-30,48,230)"/>
+            <!-- Rękaw prawy -->
+            <rect data-colorable="true" x="212" y="154" width="36" height="80" rx="16" fill="white" stroke="black" stroke-width="4"/>
+            <!-- Rękawica prawa -->
+            <ellipse data-colorable="true" cx="230" cy="240" rx="24" ry="16" fill="white" stroke="black" stroke-width="4"/>
+            <!-- Kciuk prawy -->
+            <ellipse data-colorable="true" cx="252" cy="230" rx="10" ry="7" fill="white" stroke="black" stroke-width="3" transform="rotate(30,252,230)"/>
+            <!-- Kołnierz skafandra -->
+            <ellipse data-colorable="true" cx="150" cy="148" rx="52" ry="20" fill="white" stroke="black" stroke-width="4"/>
+            <!-- Hełm (zewn.) -->
+            <circle data-colorable="true" cx="150" cy="102" r="62" fill="white" stroke="black" stroke-width="5"/>
+            <!-- Wizjer -->
+            <ellipse data-colorable="true" cx="150" cy="100" rx="40" ry="36" fill="white" stroke="black" stroke-width="4"/>
+            <!-- Twarz w wizjerze -->
+            <circle cx="138" cy="92" r="6" fill="black"/>
+            <circle cx="162" cy="92" r="6" fill="black"/>
+            <circle cx="140" cy="90" r="2" fill="white"/>
+            <circle cx="164" cy="90" r="2" fill="white"/>
+            <path d="M 134 108 Q 150 120 166 108" fill="none" stroke="black" stroke-width="3" stroke-linecap="round"/>
+            <!-- Reflektor na hełmie -->
+            <circle data-colorable="true" cx="118" cy="72" r="12" fill="white" stroke="black" stroke-width="3"/>
+            <!-- Antena hełmu -->
+            <line x1="150" y1="40" x2="150" y2="24" stroke="black" stroke-width="3"/>
+            <circle data-colorable="true" cx="150" cy="20" r="6" fill="white" stroke="black" stroke-width="3"/>
+        </svg>`
+    },
+    {
+        id: 'dinozaur',
+        difficulty: 'hard',
+        title: '🦕 Dinozaur',
+        svg: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300">
+            <!-- Ogon -->
+            <path data-colorable="true" d="M 234 188 Q 276 170 292 144 Q 296 122 278 116 Q 268 130 270 148 Q 250 156 236 172 Z" fill="white" stroke="black" stroke-width="4"/>
+            <!-- Kolce ogona -->
+            <polygon data-colorable="true" points="260,152 268,136 272,154" fill="white" stroke="black" stroke-width="3" stroke-linejoin="round"/>
+            <polygon data-colorable="true" points="274,138 280,122 284,140" fill="white" stroke="black" stroke-width="3" stroke-linejoin="round"/>
+            <!-- Tylna noga lewa -->
+            <rect data-colorable="true" x="162" y="212" width="30" height="60" rx="12" fill="white" stroke="black" stroke-width="4"/>
+            <ellipse data-colorable="true" cx="177" cy="274" rx="24" ry="12" fill="white" stroke="black" stroke-width="4"/>
+            <!-- Pazury tylne lewe -->
+            <path data-colorable="true" d="M 160 272 Q 154 284 162 276" fill="white" stroke="black" stroke-width="3"/>
+            <path data-colorable="true" d="M 174 278 Q 168 290 176 282" fill="white" stroke="black" stroke-width="3"/>
+            <path data-colorable="true" d="M 190 272 Q 188 286 182 278" fill="white" stroke="black" stroke-width="3"/>
+            <!-- Tylna noga prawa -->
+            <rect data-colorable="true" x="202" y="208" width="30" height="60" rx="12" fill="white" stroke="black" stroke-width="4"/>
+            <ellipse data-colorable="true" cx="217" cy="270" rx="24" ry="12" fill="white" stroke="black" stroke-width="4"/>
+            <!-- Pazury tylne prawe -->
+            <path data-colorable="true" d="M 200 268 Q 194 280 202 272" fill="white" stroke="black" stroke-width="3"/>
+            <path data-colorable="true" d="M 214 274 Q 208 286 216 278" fill="white" stroke="black" stroke-width="3"/>
+            <path data-colorable="true" d="M 230 268 Q 228 282 222 274" fill="white" stroke="black" stroke-width="3"/>
+            <!-- Ciało -->
+            <ellipse data-colorable="true" cx="182" cy="190" rx="90" ry="64" fill="white" stroke="black" stroke-width="5"/>
+            <!-- Łuski grzbietu / kolce -->
+            <polygon data-colorable="true" points="134,134 140,108 148,134" fill="white" stroke="black" stroke-width="3" stroke-linejoin="round"/>
+            <polygon data-colorable="true" points="152,128 160,100 168,128" fill="white" stroke="black" stroke-width="3" stroke-linejoin="round"/>
+            <polygon data-colorable="true" points="170,126 180,96 190,126" fill="white" stroke="black" stroke-width="3" stroke-linejoin="round"/>
+            <polygon data-colorable="true" points="190,128 200,102 210,128" fill="white" stroke="black" stroke-width="3" stroke-linejoin="round"/>
+            <polygon data-colorable="true" points="210,132 218,110 226,132" fill="white" stroke="black" stroke-width="3" stroke-linejoin="round"/>
+            <!-- Brzuch -->
+            <ellipse data-colorable="true" cx="182" cy="210" rx="56" ry="40" fill="white" stroke="black" stroke-width="4"/>
+            <!-- Linie brzucha -->
+            <path d="M 136 200 Q 182 208 228 200" fill="none" stroke="black" stroke-width="2"/>
+            <path d="M 134 214 Q 182 222 230 214" fill="none" stroke="black" stroke-width="2"/>
+            <path d="M 138 228 Q 182 236 226 228" fill="none" stroke="black" stroke-width="2"/>
+            <!-- Przednia noga lewa -->
+            <rect data-colorable="true" x="96" y="218" width="26" height="54" rx="10" fill="white" stroke="black" stroke-width="4"/>
+            <ellipse data-colorable="true" cx="109" cy="274" rx="22" ry="11" fill="white" stroke="black" stroke-width="4"/>
+            <path data-colorable="true" d="M 96 272 Q 90 284 98 276" fill="white" stroke="black" stroke-width="3"/>
+            <path data-colorable="true" d="M 108 278 Q 102 290 110 282" fill="white" stroke="black" stroke-width="3"/>
+            <path data-colorable="true" d="M 122 272 Q 120 286 114 278" fill="white" stroke="black" stroke-width="3"/>
+            <!-- Szyja -->
+            <path data-colorable="true" d="M 100 172 L 84 110 Q 86 92 102 88 L 126 96 L 120 174 Z" fill="white" stroke="black" stroke-width="4"/>
+            <!-- Kolce szyi -->
+            <polygon data-colorable="true" points="88,154 84,134 96,150" fill="white" stroke="black" stroke-width="3" stroke-linejoin="round"/>
+            <polygon data-colorable="true" points="86,132 82,112 94,130" fill="white" stroke="black" stroke-width="3" stroke-linejoin="round"/>
+            <!-- Głowa -->
+            <ellipse data-colorable="true" cx="88" cy="76" rx="48" ry="38" fill="white" stroke="black" stroke-width="5"/>
+            <!-- Pysk -->
+            <path data-colorable="true" d="M 46 82 Q 44 104 60 112 L 118 104 L 112 80 Z" fill="white" stroke="black" stroke-width="4"/>
+            <!-- Zęby górne -->
+            <polygon data-colorable="true" points="58,110 62,120 66,110" fill="white" stroke="black" stroke-width="2"/>
+            <polygon data-colorable="true" points="68,112 72,122 76,112" fill="white" stroke="black" stroke-width="2"/>
+            <polygon data-colorable="true" points="80,112 84,122 88,112" fill="white" stroke="black" stroke-width="2"/>
+            <polygon data-colorable="true" points="92,110 96,120 100,110" fill="white" stroke="black" stroke-width="2"/>
+            <!-- Nozdrze -->
+            <ellipse cx="56" cy="88" rx="5" ry="4" fill="black" transform="rotate(-10,56,88)"/>
+            <!-- Ucho/rożek -->
+            <polygon data-colorable="true" points="60,46 52,20 78,42" fill="white" stroke="black" stroke-width="4" stroke-linejoin="round"/>
+            <polygon data-colorable="true" points="114,44 118,18 130,44" fill="white" stroke="black" stroke-width="4" stroke-linejoin="round"/>
+            <!-- Oko -->
+            <ellipse data-colorable="true" cx="76" cy="66" rx="14" ry="12" fill="white" stroke="black" stroke-width="4"/>
+            <ellipse data-colorable="true" cx="76" cy="66" rx="8" ry="9" fill="white" stroke="black" stroke-width="2"/>
+            <circle cx="78" cy="66" r="4" fill="black"/>
+            <circle cx="80" cy="64" r="1.5" fill="white"/>
+            <!-- Łapka mała przednia -->
+            <ellipse data-colorable="true" cx="58" cy="164" rx="18" ry="12" fill="white" stroke="black" stroke-width="3" transform="rotate(-40,58,164)"/>
+            <path data-colorable="true" d="M 48 158 Q 38 166 44 172" fill="white" stroke="black" stroke-width="2"/>
+            <path data-colorable="true" d="M 56 166 Q 48 176 54 180" fill="white" stroke="black" stroke-width="2"/>
+        </svg>`
+    },
+    {
+        id: 'bajkowy-las',
+        difficulty: 'hard',
+        title: '🌲 Bajkowy Las',
+        svg: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300">
+            <!-- Niebo -->
+            <rect data-colorable="true" x="0" y="0" width="300" height="180" fill="white" stroke="none"/>
+            <!-- Słońce -->
+            <circle data-colorable="true" cx="150" cy="46" r="30" fill="white" stroke="black" stroke-width="4"/>
+            <line x1="150" y1="8" x2="150" y2="0" stroke="black" stroke-width="4" stroke-linecap="round"/>
+            <line x1="174" y1="16" x2="178" y2="10" stroke="black" stroke-width="4" stroke-linecap="round"/>
+            <line x1="186" y1="38" x2="194" y2="36" stroke="black" stroke-width="4" stroke-linecap="round"/>
+            <line x1="126" y1="16" x2="122" y2="10" stroke="black" stroke-width="4" stroke-linecap="round"/>
+            <line x1="114" y1="38" x2="106" y2="36" stroke="black" stroke-width="4" stroke-linecap="round"/>
+            <!-- Chmurki -->
+            <ellipse data-colorable="true" cx="42" cy="30" rx="28" ry="16" fill="white" stroke="black" stroke-width="3"/>
+            <ellipse data-colorable="true" cx="62" cy="22" rx="20" ry="13" fill="white" stroke="black" stroke-width="3"/>
+            <ellipse data-colorable="true" cx="22" cy="36" rx="16" ry="11" fill="white" stroke="black" stroke-width="3"/>
+            <ellipse data-colorable="true" cx="250" cy="26" rx="26" ry="15" fill="white" stroke="black" stroke-width="3"/>
+            <ellipse data-colorable="true" cx="272" cy="18" rx="18" ry="12" fill="white" stroke="black" stroke-width="3"/>
+            <ellipse data-colorable="true" cx="230" cy="34" rx="16" ry="10" fill="white" stroke="black" stroke-width="3"/>
+            <!-- Trawa -->
+            <rect data-colorable="true" x="0" y="254" width="300" height="46" fill="white" stroke="black" stroke-width="3"/>
+            <!-- Rzeka / ścieżka -->
+            <path data-colorable="true" d="M 100 300 Q 110 260 130 250 Q 150 240 170 250 Q 190 260 200 300 Z" fill="white" stroke="black" stroke-width="3"/>
+            <!-- Kamyki przy rzece -->
+            <ellipse data-colorable="true" cx="120" cy="268" rx="8" ry="5" fill="white" stroke="black" stroke-width="2"/>
+            <ellipse data-colorable="true" cx="148" cy="258" rx="6" ry="4" fill="white" stroke="black" stroke-width="2"/>
+            <ellipse data-colorable="true" cx="174" cy="266" rx="7" ry="5" fill="white" stroke="black" stroke-width="2"/>
+            <!-- Duże drzewo lewe -->
+            <rect data-colorable="true" x="30" y="210" width="20" height="56" rx="6" fill="white" stroke="black" stroke-width="4"/>
+            <circle data-colorable="true" cx="40" cy="188" r="38" fill="white" stroke="black" stroke-width="5"/>
+            <circle data-colorable="true" cx="20" cy="204" r="26" fill="white" stroke="black" stroke-width="4"/>
+            <circle data-colorable="true" cx="60" cy="204" r="26" fill="white" stroke="black" stroke-width="4"/>
+            <circle data-colorable="true" cx="40" cy="158" r="22" fill="white" stroke="black" stroke-width="4"/>
+            <!-- Gałąź lewa -->
+            <path data-colorable="true" d="M 30 220 Q 8 210 4 192" fill="none" stroke="black" stroke-width="5" stroke-linecap="round"/>
+            <circle data-colorable="true" cx="4" cy="188" r="14" fill="white" stroke="black" stroke-width="3"/>
+            <!-- Duże drzewo prawe -->
+            <rect data-colorable="true" x="250" y="210" width="20" height="56" rx="6" fill="white" stroke="black" stroke-width="4"/>
+            <circle data-colorable="true" cx="260" cy="188" r="38" fill="white" stroke="black" stroke-width="5"/>
+            <circle data-colorable="true" cx="240" cy="204" r="26" fill="white" stroke="black" stroke-width="4"/>
+            <circle data-colorable="true" cx="280" cy="204" r="26" fill="white" stroke="black" stroke-width="4"/>
+            <circle data-colorable="true" cx="260" cy="158" r="22" fill="white" stroke="black" stroke-width="4"/>
+            <!-- Gałąź prawa -->
+            <path data-colorable="true" d="M 270 220 Q 292 210 296 192" fill="none" stroke="black" stroke-width="5" stroke-linecap="round"/>
+            <circle data-colorable="true" cx="296" cy="188" r="14" fill="white" stroke="black" stroke-width="3"/>
+            <!-- Małe drzewko środkowe lewe -->
+            <rect data-colorable="true" x="94" y="224" width="12" height="36" rx="4" fill="white" stroke="black" stroke-width="3"/>
+            <polygon data-colorable="true" points="100,200 76,238 124,238" fill="white" stroke="black" stroke-width="3" stroke-linejoin="round"/>
+            <polygon data-colorable="true" points="100,178 80,212 120,212" fill="white" stroke="black" stroke-width="3" stroke-linejoin="round"/>
+            <polygon data-colorable="true" points="100,158 84,190 116,190" fill="white" stroke="black" stroke-width="3" stroke-linejoin="round"/>
+            <!-- Małe drzewko środkowe prawe -->
+            <rect data-colorable="true" x="194" y="224" width="12" height="36" rx="4" fill="white" stroke="black" stroke-width="3"/>
+            <polygon data-colorable="true" points="200,200 176,238 224,238" fill="white" stroke="black" stroke-width="3" stroke-linejoin="round"/>
+            <polygon data-colorable="true" points="200,178 180,212 220,212" fill="white" stroke="black" stroke-width="3" stroke-linejoin="round"/>
+            <polygon data-colorable="true" points="200,158 184,190 216,190" fill="white" stroke="black" stroke-width="3" stroke-linejoin="round"/>
+            <!-- Grzyby -->
+            <rect data-colorable="true" x="136" y="258" width="8" height="14" rx="2" fill="white" stroke="black" stroke-width="2"/>
+            <ellipse data-colorable="true" cx="140" cy="258" rx="14" ry="8" fill="white" stroke="black" stroke-width="2"/>
+            <circle data-colorable="true" cx="136" cy="254" r="3" fill="white" stroke="black" stroke-width="1"/>
+            <circle data-colorable="true" cx="144" cy="254" r="3" fill="white" stroke="black" stroke-width="1"/>
+            <rect data-colorable="true" x="156" y="262" width="6" height="10" rx="2" fill="white" stroke="black" stroke-width="2"/>
+            <ellipse data-colorable="true" cx="159" cy="262" rx="10" ry="6" fill="white" stroke="black" stroke-width="2"/>
+            <!-- Zając -->
+            <ellipse data-colorable="true" cx="148" cy="244" rx="12" ry="10" fill="white" stroke="black" stroke-width="3"/>
+            <ellipse data-colorable="true" cx="152" cy="234" rx="9" ry="8" fill="white" stroke="black" stroke-width="3"/>
+            <ellipse data-colorable="true" cx="146" cy="224" rx="5" ry="12" fill="white" stroke="black" stroke-width="2"/>
+            <ellipse data-colorable="true" cx="158" cy="224" rx="5" ry="12" fill="white" stroke="black" stroke-width="2"/>
+            <circle cx="149" cy="232" r="3" fill="black"/>
+            <circle cx="156" cy="232" r="3" fill="black"/>
+            <ellipse cx="152" cy="236" rx="3" ry="2" fill="black"/>
+            <!-- Motyl nad rybką -->
+            <ellipse data-colorable="true" cx="72" cy="116" rx="18" ry="28" fill="white" stroke="black" stroke-width="3" transform="rotate(-15,72,116)"/>
+            <ellipse data-colorable="true" cx="92" cy="116" rx="18" ry="28" fill="white" stroke="black" stroke-width="3" transform="rotate(15,92,116)"/>
+            <ellipse data-colorable="true" cx="76" cy="136" rx="12" ry="18" fill="white" stroke="black" stroke-width="2" transform="rotate(10,76,136)"/>
+            <ellipse data-colorable="true" cx="88" cy="136" rx="12" ry="18" fill="white" stroke="black" stroke-width="2" transform="rotate(-10,88,136)"/>
+            <line x1="82" y1="114" x2="82" y2="144" stroke="black" stroke-width="3" stroke-linecap="round"/>
+        </svg>`
+    },
+    {
+        id: 'miasto',
+        difficulty: 'hard',
+        title: '🏙️ Miasto',
+        svg: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300">
+            <!-- Niebo nocne -->
+            <rect data-colorable="true" x="0" y="0" width="300" height="220" fill="white" stroke="none"/>
+            <!-- Księżyc -->
+            <circle data-colorable="true" cx="262" cy="32" r="20" fill="white" stroke="black" stroke-width="3"/>
+            <circle cx="272" cy="26" r="14" fill="white" stroke="none"/>
+            <!-- Gwiazdy -->
+            <circle data-colorable="true" cx="22" cy="18" r="3" fill="white" stroke="black" stroke-width="2"/>
+            <circle data-colorable="true" cx="56" cy="12" r="2" fill="white" stroke="black" stroke-width="2"/>
+            <circle data-colorable="true" cx="90" cy="24" r="3" fill="white" stroke="black" stroke-width="2"/>
+            <circle data-colorable="true" cx="140" cy="14" r="2" fill="white" stroke="black" stroke-width="2"/>
+            <circle data-colorable="true" cx="188" cy="20" r="3" fill="white" stroke="black" stroke-width="2"/>
+            <circle data-colorable="true" cx="220" cy="8" r="2" fill="white" stroke="black" stroke-width="2"/>
+            <!-- Droga -->
+            <rect data-colorable="true" x="0" y="264" width="300" height="36" fill="white" stroke="black" stroke-width="3"/>
+            <!-- Linie drogi -->
+            <line x1="0" y1="282" x2="300" y2="282" stroke="black" stroke-width="2" stroke-dasharray="20,14"/>
+            <!-- Chodnik -->
+            <rect data-colorable="true" x="0" y="252" width="300" height="16" fill="white" stroke="black" stroke-width="3"/>
+            <!-- Budynek 1 (niski, lewy) -->
+            <rect data-colorable="true" x="4" y="186" width="52" height="66" fill="white" stroke="black" stroke-width="4"/>
+            <rect data-colorable="true" x="8" y="196" width="14" height="16" rx="2" fill="white" stroke="black" stroke-width="2"/>
+            <rect data-colorable="true" x="26" y="196" width="14" height="16" rx="2" fill="white" stroke="black" stroke-width="2"/>
+            <rect data-colorable="true" x="8" y="220" width="14" height="16" rx="2" fill="white" stroke="black" stroke-width="2"/>
+            <rect data-colorable="true" x="26" y="220" width="14" height="16" rx="2" fill="white" stroke="black" stroke-width="2"/>
+            <!-- Antena bud 1 -->
+            <line x1="30" y1="186" x2="30" y2="172" stroke="black" stroke-width="3"/>
+            <circle data-colorable="true" cx="30" cy="170" r="4" fill="white" stroke="black" stroke-width="2"/>
+            <!-- Budynek 2 (wysoki środkowy lewy) -->
+            <rect data-colorable="true" x="60" y="100" width="58" height="152" fill="white" stroke="black" stroke-width="4"/>
+            <!-- Okna bud 2 -->
+            <rect data-colorable="true" x="66" y="110" width="12" height="14" rx="2" fill="white" stroke="black" stroke-width="2"/>
+            <rect data-colorable="true" x="84" y="110" width="12" height="14" rx="2" fill="white" stroke="black" stroke-width="2"/>
+            <rect data-colorable="true" x="100" y="110" width="12" height="14" rx="2" fill="white" stroke="black" stroke-width="2"/>
+            <rect data-colorable="true" x="66" y="132" width="12" height="14" rx="2" fill="white" stroke="black" stroke-width="2"/>
+            <rect data-colorable="true" x="84" y="132" width="12" height="14" rx="2" fill="white" stroke="black" stroke-width="2"/>
+            <rect data-colorable="true" x="100" y="132" width="12" height="14" rx="2" fill="white" stroke="black" stroke-width="2"/>
+            <rect data-colorable="true" x="66" y="154" width="12" height="14" rx="2" fill="white" stroke="black" stroke-width="2"/>
+            <rect data-colorable="true" x="84" y="154" width="12" height="14" rx="2" fill="white" stroke="black" stroke-width="2"/>
+            <rect data-colorable="true" x="100" y="154" width="12" height="14" rx="2" fill="white" stroke="black" stroke-width="2"/>
+            <rect data-colorable="true" x="66" y="176" width="12" height="14" rx="2" fill="white" stroke="black" stroke-width="2"/>
+            <rect data-colorable="true" x="84" y="176" width="12" height="14" rx="2" fill="white" stroke="black" stroke-width="2"/>
+            <rect data-colorable="true" x="100" y="176" width="12" height="14" rx="2" fill="white" stroke="black" stroke-width="2"/>
+            <!-- Dach bud 2 -->
+            <rect data-colorable="true" x="58" y="88" width="62" height="16" rx="4" fill="white" stroke="black" stroke-width="3"/>
+            <!-- Wieżowiec centrum -->
+            <rect data-colorable="true" x="122" y="54" width="56" height="198" fill="white" stroke="black" stroke-width="5"/>
+            <!-- Okna wieżowca -->
+            <rect data-colorable="true" x="128" y="68" width="14" height="18" rx="2" fill="white" stroke="black" stroke-width="2"/>
+            <rect data-colorable="true" x="148" y="68" width="14" height="18" rx="2" fill="white" stroke="black" stroke-width="2"/>
+            <rect data-colorable="true" x="128" y="94" width="14" height="18" rx="2" fill="white" stroke="black" stroke-width="2"/>
+            <rect data-colorable="true" x="148" y="94" width="14" height="18" rx="2" fill="white" stroke="black" stroke-width="2"/>
+            <rect data-colorable="true" x="128" y="120" width="14" height="18" rx="2" fill="white" stroke="black" stroke-width="2"/>
+            <rect data-colorable="true" x="148" y="120" width="14" height="18" rx="2" fill="white" stroke="black" stroke-width="2"/>
+            <rect data-colorable="true" x="128" y="146" width="14" height="18" rx="2" fill="white" stroke="black" stroke-width="2"/>
+            <rect data-colorable="true" x="148" y="146" width="14" height="18" rx="2" fill="white" stroke="black" stroke-width="2"/>
+            <rect data-colorable="true" x="128" y="172" width="14" height="18" rx="2" fill="white" stroke="black" stroke-width="2"/>
+            <rect data-colorable="true" x="148" y="172" width="14" height="18" rx="2" fill="white" stroke="black" stroke-width="2"/>
+            <rect data-colorable="true" x="128" y="198" width="14" height="18" rx="2" fill="white" stroke="black" stroke-width="2"/>
+            <rect data-colorable="true" x="148" y="198" width="14" height="18" rx="2" fill="white" stroke="black" stroke-width="2"/>
+            <!-- Antena wieżowca -->
+            <line x1="150" y1="54" x2="150" y2="26" stroke="black" stroke-width="4"/>
+            <circle data-colorable="true" cx="150" cy="22" r="6" fill="white" stroke="black" stroke-width="3"/>
+            <!-- Budynek 3 -->
+            <rect data-colorable="true" x="182" y="110" width="56" height="142" fill="white" stroke="black" stroke-width="4"/>
+            <rect data-colorable="true" x="188" y="122" width="12" height="14" rx="2" fill="white" stroke="black" stroke-width="2"/>
+            <rect data-colorable="true" x="206" y="122" width="12" height="14" rx="2" fill="white" stroke="black" stroke-width="2"/>
+            <rect data-colorable="true" x="220" y="122" width="12" height="14" rx="2" fill="white" stroke="black" stroke-width="2"/>
+            <rect data-colorable="true" x="188" y="144" width="12" height="14" rx="2" fill="white" stroke="black" stroke-width="2"/>
+            <rect data-colorable="true" x="206" y="144" width="12" height="14" rx="2" fill="white" stroke="black" stroke-width="2"/>
+            <rect data-colorable="true" x="220" y="144" width="12" height="14" rx="2" fill="white" stroke="black" stroke-width="2"/>
+            <rect data-colorable="true" x="188" y="166" width="12" height="14" rx="2" fill="white" stroke="black" stroke-width="2"/>
+            <rect data-colorable="true" x="206" y="166" width="12" height="14" rx="2" fill="white" stroke="black" stroke-width="2"/>
+            <rect data-colorable="true" x="220" y="166" width="12" height="14" rx="2" fill="white" stroke="black" stroke-width="2"/>
+            <rect data-colorable="true" x="188" y="188" width="12" height="14" rx="2" fill="white" stroke="black" stroke-width="2"/>
+            <rect data-colorable="true" x="206" y="188" width="12" height="14" rx="2" fill="white" stroke="black" stroke-width="2"/>
+            <rect data-colorable="true" x="220" y="188" width="12" height="14" rx="2" fill="white" stroke="black" stroke-width="2"/>
+            <rect data-colorable="true" x="180" y="98" width="60" height="16" rx="4" fill="white" stroke="black" stroke-width="3"/>
+            <!-- Budynek 4 (prawy niski) -->
+            <rect data-colorable="true" x="242" y="182" width="54" height="70" fill="white" stroke="black" stroke-width="4"/>
+            <rect data-colorable="true" x="248" y="192" width="14" height="16" rx="2" fill="white" stroke="black" stroke-width="2"/>
+            <rect data-colorable="true" x="268" y="192" width="14" height="16" rx="2" fill="white" stroke="black" stroke-width="2"/>
+            <rect data-colorable="true" x="248" y="216" width="14" height="16" rx="2" fill="white" stroke="black" stroke-width="2"/>
+            <rect data-colorable="true" x="268" y="216" width="14" height="16" rx="2" fill="white" stroke="black" stroke-width="2"/>
+            <!-- Latarnia -->
+            <rect data-colorable="true" x="46" y="222" width="6" height="32" fill="white" stroke="black" stroke-width="2"/>
+            <circle data-colorable="true" cx="49" cy="220" r="8" fill="white" stroke="black" stroke-width="2"/>
+            <!-- Latarnia 2 -->
+            <rect data-colorable="true" x="246" y="222" width="6" height="32" fill="white" stroke="black" stroke-width="2"/>
+            <circle data-colorable="true" cx="249" cy="220" r="8" fill="white" stroke="black" stroke-width="2"/>
+        </svg>`
+    },
+    {
+        id: 'krolowa-pszczol',
+        difficulty: 'hard',
+        title: '🐝 Ul i pszczoły',
+        svg: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300">
+            <!-- Tło łąki -->
+            <rect data-colorable="true" x="0" y="220" width="300" height="80" fill="white" stroke="black" stroke-width="3"/>
+            <!-- Trawa / kwiaty tło -->
+            <path data-colorable="true" d="M 0 220 Q 30 210 60 220 Q 90 230 120 220 Q 150 210 180 220 Q 210 230 240 220 Q 270 210 300 220 L 300 240 L 0 240 Z" fill="white" stroke="black" stroke-width="3"/>
+            <!-- Kwiatek 1 -->
+            <circle data-colorable="true" cx="20" cy="226" r="8" fill="white" stroke="black" stroke-width="2"/>
+            <circle data-colorable="true" cx="10" cy="218" r="5" fill="white" stroke="black" stroke-width="2"/>
+            <circle data-colorable="true" cx="20" cy="216" r="5" fill="white" stroke="black" stroke-width="2"/>
+            <circle data-colorable="true" cx="30" cy="218" r="5" fill="white" stroke="black" stroke-width="2"/>
+            <!-- Kwiatek 2 -->
+            <circle data-colorable="true" cx="260" cy="228" r="8" fill="white" stroke="black" stroke-width="2"/>
+            <circle data-colorable="true" cx="250" cy="220" r="5" fill="white" stroke="black" stroke-width="2"/>
+            <circle data-colorable="true" cx="260" cy="218" r="5" fill="white" stroke="black" stroke-width="2"/>
+            <circle data-colorable="true" cx="270" cy="220" r="5" fill="white" stroke="black" stroke-width="2"/>
+            <!-- Ul - podstawa -->
+            <ellipse data-colorable="true" cx="150" cy="230" rx="52" ry="12" fill="white" stroke="black" stroke-width="4"/>
+            <!-- Wejście do ula -->
+            <ellipse data-colorable="true" cx="150" cy="230" rx="22" ry="8" fill="white" stroke="black" stroke-width="3"/>
+            <!-- Ul - korpus dolny -->
+            <path data-colorable="true" d="M 98 230 L 88 180 Q 118 162 150 160 Q 182 162 212 180 L 202 230 Z" fill="white" stroke="black" stroke-width="4"/>
+            <!-- Linie desek dolnego korpusu -->
+            <line x1="90" y1="218" x2="210" y2="218" stroke="black" stroke-width="2"/>
+            <line x1="86" y1="202" x2="214" y2="202" stroke="black" stroke-width="2"/>
+            <line x1="88" y1="188" x2="212" y2="188" stroke="black" stroke-width="2"/>
+            <!-- Ul - korpus górny -->
+            <path data-colorable="true" d="M 88 180 L 84 134 Q 112 114 150 112 Q 188 114 216 134 L 212 180 Z" fill="white" stroke="black" stroke-width="4"/>
+            <!-- Linie desek górnego korpusu -->
+            <line x1="84" y1="168" x2="216" y2="168" stroke="black" stroke-width="2"/>
+            <line x1="84" y1="152" x2="216" y2="152" stroke="black" stroke-width="2"/>
+            <line x1="86" y1="138" x2="214" y2="138" stroke="black" stroke-width="2"/>
+            <!-- Ul - dach -->
+            <path data-colorable="true" d="M 72 134 Q 150 90 228 134 Z" fill="white" stroke="black" stroke-width="4"/>
+            <path data-colorable="true" d="M 80 134 Q 150 96 220 134 L 212 134 Q 150 100 88 134 Z" fill="white" stroke="black" stroke-width="3"/>
+            <!-- Daszek -->
+            <ellipse data-colorable="true" cx="150" cy="134" rx="80" ry="14" fill="white" stroke="black" stroke-width="4"/>
+            <!-- Gałązka na dachu -->
+            <rect data-colorable="true" x="146" y="88" width="8" height="30" rx="3" fill="white" stroke="black" stroke-width="3"/>
+            <!-- Pszczoła 1 (duża, lewa) -->
+            <ellipse data-colorable="true" cx="56" cy="100" rx="22" ry="14" fill="white" stroke="black" stroke-width="3"/>
+            <line x1="44" y1="100" x2="68" y2="100" stroke="black" stroke-width="3"/>
+            <line x1="48" y1="100" x2="48" y2="108" stroke="black" stroke-width="2"/>
+            <line x1="56" y1="100" x2="56" y2="110" stroke="black" stroke-width="2"/>
+            <line x1="64" y1="100" x2="64" y2="108" stroke="black" stroke-width="2"/>
+            <ellipse data-colorable="true" cx="42" cy="96" rx="12" ry="8" fill="white" stroke="black" stroke-width="3"/>
+            <ellipse data-colorable="true" cx="42" cy="108" rx="10" ry="6" fill="white" stroke="black" stroke-width="2"/>
+            <ellipse data-colorable="true" cx="68" cy="94" rx="12" ry="8" fill="white" stroke="black" stroke-width="3"/>
+            <ellipse data-colorable="true" cx="68" cy="106" rx="10" ry="6" fill="white" stroke="black" stroke-width="2"/>
+            <circle cx="46" cy="96" r="4" fill="black"/>
+            <circle cx="48" cy="94" r="1.5" fill="white"/>
+            <!-- Żądło -->
+            <polygon points="78,100 86,100 82,106" fill="black"/>
+            <!-- Pszczoła 2 (prawa środkowa) -->
+            <ellipse data-colorable="true" cx="240" cy="80" rx="18" ry="11" fill="white" stroke="black" stroke-width="3"/>
+            <line x1="230" y1="80" x2="250" y2="80" stroke="black" stroke-width="2"/>
+            <line x1="234" y1="80" x2="234" y2="86" stroke="black" stroke-width="2"/>
+            <line x1="240" y1="80" x2="240" y2="88" stroke="black" stroke-width="2"/>
+            <line x1="246" y1="80" x2="246" y2="86" stroke="black" stroke-width="2"/>
+            <ellipse data-colorable="true" cx="228" cy="76" rx="10" ry="6" fill="white" stroke="black" stroke-width="2"/>
+            <ellipse data-colorable="true" cx="228" cy="86" rx="8" ry="5" fill="white" stroke="black" stroke-width="2"/>
+            <ellipse data-colorable="true" cx="250" cy="74" rx="10" ry="6" fill="white" stroke="black" stroke-width="2"/>
+            <ellipse data-colorable="true" cx="250" cy="84" rx="8" ry="5" fill="white" stroke="black" stroke-width="2"/>
+            <circle cx="232" cy="76" r="3" fill="black"/>
+            <polygon points="258,80 264,80 261,84" fill="black"/>
+            <!-- Pszczoła 3 (mała, górna) -->
+            <ellipse data-colorable="true" cx="150" cy="44" rx="14" ry="9" fill="white" stroke="black" stroke-width="2"/>
+            <line x1="142" y1="44" x2="158" y2="44" stroke="black" stroke-width="2"/>
+            <ellipse data-colorable="true" cx="140" cy="40" rx="9" ry="6" fill="white" stroke="black" stroke-width="2"/>
+            <ellipse data-colorable="true" cx="140" cy="50" rx="7" ry="4" fill="white" stroke="black" stroke-width="2"/>
+            <ellipse data-colorable="true" cx="160" cy="40" rx="9" ry="6" fill="white" stroke="black" stroke-width="2"/>
+            <ellipse data-colorable="true" cx="160" cy="50" rx="7" ry="4" fill="white" stroke="black" stroke-width="2"/>
+            <circle cx="143" cy="40" r="3" fill="black"/>
+            <polygon points="164,44 170,44 167,48" fill="black"/>
+            <!-- Plaster miodu wzór na ulu -->
+            <path d="M 130 170 L 138 162 L 146 170 L 138 178 Z" fill="none" stroke="black" stroke-width="2"/>
+            <path d="M 146 170 L 154 162 L 162 170 L 154 178 Z" fill="none" stroke="black" stroke-width="2"/>
+            <path d="M 162 170 L 170 162 L 178 170 L 170 178 Z" fill="none" stroke="black" stroke-width="2"/>
+            <path d="M 138 186 L 146 178 L 154 186 L 146 194 Z" fill="none" stroke="black" stroke-width="2"/>
+            <path d="M 154 186 L 162 178 L 170 186 L 162 194 Z" fill="none" stroke="black" stroke-width="2"/>
+        </svg>`
+    },
+    {
+        id: 'kosmiczny-statek',
+        difficulty: 'hard',
+        title: '🛸 Kosmiczny Statek',
+        svg: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300">
+            <!-- Tło kosmosu -->
+            <rect data-colorable="true" x="0" y="0" width="300" height="300" fill="white" stroke="none"/>
+            <!-- Gwiazdy losowe -->
+            <circle data-colorable="true" cx="14" cy="18" r="3" fill="white" stroke="black" stroke-width="2"/>
+            <circle data-colorable="true" cx="40" cy="8" r="2" fill="white" stroke="black" stroke-width="2"/>
+            <circle data-colorable="true" cx="72" cy="22" r="3" fill="white" stroke="black" stroke-width="2"/>
+            <circle data-colorable="true" cx="102" cy="10" r="2" fill="white" stroke="black" stroke-width="2"/>
+            <circle data-colorable="true" cx="200" cy="14" r="3" fill="white" stroke="black" stroke-width="2"/>
+            <circle data-colorable="true" cx="240" cy="6" r="2" fill="white" stroke="black" stroke-width="2"/>
+            <circle data-colorable="true" cx="274" cy="28" r="3" fill="white" stroke="black" stroke-width="2"/>
+            <circle data-colorable="true" cx="288" cy="54" r="2" fill="white" stroke="black" stroke-width="2"/>
+            <circle data-colorable="true" cx="18" cy="80" r="2" fill="white" stroke="black" stroke-width="2"/>
+            <circle data-colorable="true" cx="6" cy="130" r="3" fill="white" stroke="black" stroke-width="2"/>
+            <circle data-colorable="true" cx="290" cy="130" r="2" fill="white" stroke="black" stroke-width="2"/>
+            <circle data-colorable="true" cx="22" cy="240" r="3" fill="white" stroke="black" stroke-width="2"/>
+            <circle data-colorable="true" cx="278" cy="240" r="2" fill="white" stroke="black" stroke-width="2"/>
+            <!-- Planeta mała -->
+            <circle data-colorable="true" cx="38" cy="200" r="28" fill="white" stroke="black" stroke-width="3"/>
+            <ellipse data-colorable="true" cx="38" cy="200" rx="40" ry="10" fill="white" stroke="black" stroke-width="3" transform="rotate(-20,38,200)"/>
+            <ellipse data-colorable="true" cx="30" cy="190" rx="10" ry="7" fill="white" stroke="black" stroke-width="2"/>
+            <ellipse data-colorable="true" cx="46" cy="206" rx="7" ry="5" fill="white" stroke="black" stroke-width="2"/>
+            <!-- Planeta duża prawa -->
+            <circle data-colorable="true" cx="258" cy="240" r="42" fill="white" stroke="black" stroke-width="4"/>
+            <path d="M 216 240 Q 258 230 300 240" fill="none" stroke="black" stroke-width="3"/>
+            <path d="M 218 250 Q 258 264 298 250" fill="none" stroke="black" stroke-width="2"/>
+            <ellipse data-colorable="true" cx="242" cy="222" rx="14" ry="10" fill="white" stroke="black" stroke-width="2"/>
+            <ellipse data-colorable="true" cx="268" cy="250" rx="10" ry="7" fill="white" stroke="black" stroke-width="2"/>
+            <!-- Kometa / smugi -->
+            <path data-colorable="true" d="M 80 54 Q 100 46 116 52 Q 100 58 80 54 Z" fill="white" stroke="black" stroke-width="2"/>
+            <path data-colorable="true" d="M 76 60 Q 96 56 110 62 Q 96 68 76 60 Z" fill="white" stroke="black" stroke-width="2"/>
+            <circle data-colorable="true" cx="118" cy="54" r="8" fill="white" stroke="black" stroke-width="3"/>
+            <!-- Statek kosmiczny – dysze napędowe (dół) -->
+            <ellipse data-colorable="true" cx="100" cy="230" rx="18" ry="10" fill="white" stroke="black" stroke-width="3"/>
+            <ellipse data-colorable="true" cx="150" cy="236" rx="22" ry="12" fill="white" stroke="black" stroke-width="3"/>
+            <ellipse data-colorable="true" cx="200" cy="230" rx="18" ry="10" fill="white" stroke="black" stroke-width="3"/>
+            <!-- Ogień silników -->
+            <path data-colorable="true" d="M 84 228 Q 80 252 88 260 Q 96 252 100 228 Z" fill="white" stroke="black" stroke-width="3"/>
+            <path data-colorable="true" d="M 130 234 Q 126 264 136 274 Q 146 264 150 234 Z" fill="white" stroke="black" stroke-width="3"/>
+            <path data-colorable="true" d="M 150 234 Q 154 264 164 274 Q 172 264 170 234 Z" fill="white" stroke="black" stroke-width="3"/>
+            <path data-colorable="true" d="M 184 228 Q 188 252 196 260 Q 202 252 200 228 Z" fill="white" stroke="black" stroke-width="3"/>
+            <!-- Kadłub statku -->
+            <path data-colorable="true" d="M 70 220 L 56 170 Q 80 148 150 144 Q 220 148 244 170 L 230 220 Z" fill="white" stroke="black" stroke-width="5"/>
+            <!-- Boczne skrzydła -->
+            <path data-colorable="true" d="M 70 220 L 40 238 L 50 206 L 70 198 Z" fill="white" stroke="black" stroke-width="4"/>
+            <path data-colorable="true" d="M 230 220 L 260 238 L 250 206 L 230 198 Z" fill="white" stroke="black" stroke-width="4"/>
+            <!-- Kopuła (szklana) -->
+            <ellipse data-colorable="true" cx="150" cy="148" rx="68" ry="24" fill="white" stroke="black" stroke-width="4"/>
+            <!-- Część górna kopuły -->
+            <path data-colorable="true" d="M 82 148 Q 90 100 150 88 Q 210 100 218 148 Z" fill="white" stroke="black" stroke-width="4"/>
+            <!-- Szczyt statku -->
+            <path data-colorable="true" d="M 118 98 Q 150 60 182 98 Z" fill="white" stroke="black" stroke-width="4"/>
+            <!-- Okna na kadłubie -->
+            <circle data-colorable="true" cx="100" cy="192" r="16" fill="white" stroke="black" stroke-width="3"/>
+            <circle data-colorable="true" cx="100" cy="192" r="8" fill="white" stroke="black" stroke-width="2"/>
+            <circle data-colorable="true" cx="200" cy="192" r="16" fill="white" stroke="black" stroke-width="3"/>
+            <circle data-colorable="true" cx="200" cy="192" r="8" fill="white" stroke="black" stroke-width="2"/>
+            <!-- Okno w kopule -->
+            <ellipse data-colorable="true" cx="150" cy="132" rx="30" ry="22" fill="white" stroke="black" stroke-width="3"/>
+            <!-- Alien w oknie -->
+            <ellipse data-colorable="true" cx="150" cy="128" rx="16" ry="14" fill="white" stroke="black" stroke-width="2"/>
+            <circle cx="144" cy="124" r="4" fill="black"/>
+            <circle cx="156" cy="124" r="4" fill="black"/>
+            <path d="M 144 132 Q 150 138 156 132" fill="none" stroke="black" stroke-width="2" stroke-linecap="round"/>
+            <!-- Detale skrzydeł - odznaki -->
+            <rect data-colorable="true" x="44" y="212" width="18" height="12" rx="3" fill="white" stroke="black" stroke-width="2"/>
+            <rect data-colorable="true" x="238" y="212" width="18" height="12" rx="3" fill="white" stroke="black" stroke-width="2"/>
+            <!-- Światła nawigacyjne -->
+            <circle data-colorable="true" cx="40" cy="228" r="5" fill="white" stroke="black" stroke-width="2"/>
+            <circle data-colorable="true" cx="260" cy="228" r="5" fill="white" stroke="black" stroke-width="2"/>
         </svg>`
     },
 ];
@@ -1096,24 +2181,29 @@ function openImage(imageId) {
     const container = document.getElementById('coloring-svg-container');
     container.innerHTML = img.svg;
 
-    const svgEl = container.querySelector('svg');
-    if (svgEl) {
-        svgEl.style.maxWidth  = '100%';
-        svgEl.style.maxHeight = '100%';
+    // Reset tła canvasu
+        const canvasWrap = document.querySelector('.svg-canvas-wrap');
+        canvasWrap.style.backgroundColor = 'white';
 
-        // Dodaj kolorowalne tło jako pierwszy element SVG
-        const vb = svgEl.viewBox.baseVal;
-        const bgRect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
-        bgRect.setAttribute('data-colorable', 'true');
-        bgRect.setAttribute('data-bg', 'true');
-        bgRect.setAttribute('x', vb.x || 0);
-        bgRect.setAttribute('y', vb.y || 0);
-        bgRect.setAttribute('width',  vb.width  || 300);
-        bgRect.setAttribute('height', vb.height || 300);
-        bgRect.setAttribute('fill', 'white');
-        svgEl.insertBefore(bgRect, svgEl.firstChild);
+        // Kliknięcie w tło (poza elementami SVG) ustawia kolor tła
+        canvasWrap._bgHandler && canvasWrap.removeEventListener('click', canvasWrap._bgHandler);
+        canvasWrap._bgHandler = () => { canvasWrap.style.backgroundColor = selectedColor; };
+        canvasWrap.addEventListener('click', canvasWrap._bgHandler);
 
-        svgEl.querySelectorAll('[data-colorable]').forEach(el => {
+        const svgEl = container.querySelector('svg');
+        if (svgEl) {
+            svgEl.style.maxWidth  = '100%';
+            svgEl.style.maxHeight = '100%';
+
+            // Blokuj propagację kliknięć na elementy SVG BEZ data-colorable
+            // (np. oczy, wąsy, linie dekoracyjne) – inaczej kolorowałyby tło
+            svgEl.addEventListener('click', e => {
+                if (e.target !== svgEl && !e.target.hasAttribute('data-colorable')) {
+                    e.stopPropagation();
+                }
+            }, true);
+
+            svgEl.querySelectorAll('[data-colorable]').forEach(el => {
             const applyColor = () => {
                 const tag = el.tagName.toLowerCase();
                 if (tag === 'line' || tag === 'polyline') {
@@ -1152,44 +2242,12 @@ function goToList() {
 }
 
 /* ============================================================
-   ZAMKNIĘCIE APLIKACJI
-   ============================================================ */
-function confirmClose() {
-    document.getElementById('modal-close').classList.add('active');
-}
-
-function cancelClose() {
-    document.getElementById('modal-close').classList.remove('active');
-}
-
-function doClose() {
-    if (document.exitFullscreen)            document.exitFullscreen();
-    else if (document.webkitExitFullscreen) document.webkitExitFullscreen();
-
-    window.close();
-
-    setTimeout(() => {
-        document.getElementById('modal-close').innerHTML = `
-            <div class="modal-box">
-                <div class="modal-emoji">😊</div>
-                <p class="modal-text">Do zobaczenia!<br>Możesz zamknąć tę kartę.</p>
-            </div>`;
-    }, 400);
-}
-
-/* ============================================================
    KLAWIATURA
    ============================================================ */
 document.addEventListener('keydown', e => {
-    const modal = document.getElementById('modal-close');
     if (e.key === 'Escape') {
-        if (modal.classList.contains('active')) cancelClose();
-        else confirmClose();
+        goToList();
     }
-});
-
-document.getElementById('modal-close').addEventListener('click', function(e) {
-    if (e.target === this) cancelClose();
 });
 </script>
 </body>
